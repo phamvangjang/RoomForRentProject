@@ -17,7 +17,7 @@ module.exports = {
             published: {
                 type: Sequelize.STRING
             },
-            hastag: {
+            hashtag: {
                 type: Sequelize.STRING
             },
             createdAt: {

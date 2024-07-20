@@ -46,6 +46,8 @@ const SignInService = ({ password, phone }) => new Promise(async (resolve, rejec
         reject(error)
     }
 })
+
+
 module.exports = {
     registerService,
     SignInService

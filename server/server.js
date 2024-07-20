@@ -4,6 +4,7 @@ const cors = require('cors')
 const initRoutes = require('./src/routes')
 const connectdb = require('./src/config/connectdb')
 
+
 const app = express()
 app.use(cors({
     origin: process.env.CLIENT_URL,

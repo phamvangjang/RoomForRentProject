@@ -16,3 +16,7 @@ Content-Type: application/json
     "phone" : "0976320547",
     "password": "123456"
 }
+
+### insert data 
+POST http://localhost:5000/api/insert/
+Content-Type: application/json
