@@ -20,3 +20,7 @@ Content-Type: application/json
 ### insert data 
 POST http://localhost:5000/api/insert/
 Content-Type: application/json
+
+### get categories 
+GET http://localhost:5000/api/category/
+Content-Type: application/json
