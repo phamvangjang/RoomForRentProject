@@ -3,6 +3,7 @@ require('dotenv').config()
 const cors = require('cors')
 const initRoutes = require('./src/routes')
 const connectdb = require('./src/config/connectdb')
+const generateCode = require('./src/ultils/generateCode')
 
 
 const app = express()

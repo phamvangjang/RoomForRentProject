@@ -5,7 +5,7 @@ import { CiLocationOn } from "react-icons/ci";
 
 const Search = () => {
     return (
-        <div className='h-[55px] py-[10px] px-[10px] bg-[#febb02] rounded-md flex items-center justify-around gap-2' >
+        <div className='h-[55px] container mx-auto my-4 py-[10px] px-[10px] bg-[#febb02] rounded-md flex items-center justify-around gap-2' >
             <SearchItem IconAfter={<FaChevronRight />} fontWeight IconBefore={<FaHotel />} text='Phong tro, nha tro' />
             <SearchItem IconAfter={<FaChevronRight />} IconBefore={<CiLocationOn />} text='Toan quoc' />
             <SearchItem IconAfter={<FaChevronRight />} IconBefore={<FaMoneyBill />} text='Chon gia' />

@@ -1,8 +1,11 @@
 import React from 'react'
+import Province from '../../components/Province'
 
 const RentalRoom = () => {
     return (
-        <div>RentalRoom</div>
+        <div className='w-full'>RentalRoom
+            <Province/>
+        </div>
     )
 }
 
