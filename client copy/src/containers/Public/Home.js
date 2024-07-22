@@ -6,9 +6,9 @@ import Navigation from './Navigation'
 const Home = () => {
     return (
         <div className=' w-full h-full'>
-            <Header className='container mx-auto' />
+            <Header />
             <Navigation />
-            <div className='w-full flex flex-col items-center justify-start'>
+            <div className='container mx-auto w-full flex flex-col items-start justify-start mt-3'>
                 <Outlet />
             </div>
         </div>
