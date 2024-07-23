@@ -1,5 +1,5 @@
-import React, { memo } from 'react'
-import { FaStar } from "react-icons/fa";
+import React, { memo, useState } from 'react'
+import { FaStar, FaHeart, FaRegHeart } from "react-icons/fa";
 import { Button } from '../components'
 
 const images = [
@@ -9,14 +9,22 @@ const images = [
     "https://pt123.cdn.static123.com/images/thumbs/900x600/fit/2022/07/19/400e7ebd-5d88-48af-8599-0d074a1ee014_1658240494.jpg",
 ]
 const Item = () => {
+    const [hoverHeart, setHoverHeart] = useState(false)
     return (
         <div className='w-full bg-secondary3 border-t-2 border-[#E13427]'>
             <div className='w-full flex py-4 px-5'>
-                <div className='w-[40%] flex flex-wrap items-center'>
+                <div className='w-[40%] flex flex-wrap items-center relative'>
                     <img
                         src={images[0]}
                         className='w-[280px] h-[240px] object-cover'
                     />
+                    <span className='px-2 rounded-md bg-overlay70 text-white absolute left-1 bottom-1'>4 anh</span>
+                    <span
+                        onMouseEnter={() => setHoverHeart(true)}
+                        onMouseLeave={() => setHoverHeart(false)}
+                        className='absolute bottom-1 right-5 text-white cursor-pointer'>
+                        {hoverHeart ? <FaHeart size={26} color='red' bgColor='red' /> : <FaRegHeart size={26} />}
+                    </span>
                 </div>
                 <div className='w-[60%] pl-3 flex flex-col gap-4'>
                     <div className='flex items-start'>
@@ -34,7 +42,7 @@ const Item = () => {
                     </div>
 
                     <p className='text-desc text-sm'>
-                        NHÀ CHO THUÊ 5/99/ Nơ Trang Long P7 Bình ThạnhCÓ cổng riêng ko chung chủ ở được 5 6 bạn thỏa mái Nhà mới sơn sửa sạch thoáng mátNguyên căn, có gác…
+                        NHÀ CHO THUÊ 5/99/ Nơ Trang Long P7 Bình Thạnh CÓ cổng riêng ko chung chủ ở được 5 6 bạn thỏa mái Nhà mới sơn sửa sạch thoáng mátNguyên căn, có gác…
                     </p>
 
                     <div className='flex justify-between items-center'>

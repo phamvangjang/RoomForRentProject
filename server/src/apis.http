@@ -24,3 +24,7 @@ Content-Type: application/json
 ### get categories 
 GET http://localhost:5000/api/category/
 Content-Type: application/json
+
+### get posts 
+GET http://localhost:5000/api/post/
+Content-Type: application/json
