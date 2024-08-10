@@ -2,23 +2,24 @@ import React, { memo, useState } from 'react'
 import { FaStar, FaHeart, FaRegHeart } from "react-icons/fa";
 import { Button } from '../components'
 
-const images = [
-    "https://pt123.cdn.static123.com/images/thumbs/900x600/fit/2022/07/19/6310726d-d075-4e35-b1cb-cf5616bf5212_1658240491.jpg",
-    "https://pt123.cdn.static123.com/images/thumbs/900x600/fit/2022/07/19/9c60836e-26b2-4737-a6c8-60cb5187fa4c_1658240485.jpg",
-    "https://pt123.cdn.static123.com/images/thumbs/900x600/fit/2022/07/19/716c753e-8e03-4cc8-9d09-e52ec19ce01b_1658240485.jpg",
-    "https://pt123.cdn.static123.com/images/thumbs/900x600/fit/2022/07/19/400e7ebd-5d88-48af-8599-0d074a1ee014_1658240494.jpg",
-]
-const Item = () => {
+const indexs = [0, 1, 2, 3];
+const Item = ({ images, user, title, description, star, attributes, address }) => {
     const [hoverHeart, setHoverHeart] = useState(false)
     return (
         <div className='w-full bg-secondary3 border-t-2 border-[#E13427]'>
             <div className='w-full flex py-4 px-5'>
-                <div className='w-[40%] flex flex-wrap items-center relative'>
-                    <img
-                        src={images[0]}
-                        className='w-[280px] h-[240px] object-cover'
-                    />
-                    <span className='px-2 rounded-md bg-overlay70 text-white absolute left-1 bottom-1'>4 anh</span>
+                <div className='w-[40%] flex flex-wrap items-center justify-center relative cursor-pointer gap-[2px]'>
+                    {images.length > 0 && images.filter((i, index) => indexs.some(i => i === index))?.map((i,index) => {
+                        return (
+                            <img
+                                key={index}
+                                src={i}
+                                alt='preview'
+                                className='w-[160px] h-[140px] object-cover'
+                            />
+                        )
+                    })}
+                    <span className='px-2 rounded-md bg-overlay70 text-white absolute left-3 bottom-1'>{`${images?.length} ảnh`}</span>
                     <span
                         onMouseEnter={() => setHoverHeart(true)}
                         onMouseLeave={() => setHoverHeart(false)}
@@ -29,20 +30,20 @@ const Item = () => {
                 <div className='w-[60%] pl-3 flex flex-col gap-4'>
                     <div className='flex items-start'>
                         <span className='flex items-center gap-1 text-yellow-400'><FaStar /><FaStar /><FaStar /><FaStar /><FaStar /></span>
-                        <h2 className='text-sm text-title font-semibold'> NHÀ CHO THUÊ 5/99/ Nơ Trang Long P7 Bình Thạnh Nguyên căn, có gác rộng… </h2>
+                        <h2 className='text-sm text-title font-semibold'>{title}</h2>
                     </div>
 
                     <div className='flex flex-col gap-1'>
-                        <div className='flex items-center justify-around text-sm'>
-                            <span className=' text-price font-bold'>8 triệu/tháng</span>
-                            <span className='font-normal text-desc'>40m²</span>
-                            <span className='font-normal text-main hover:underline cursor-pointer'>Quận Bình Thạnh, Hồ Chí Minh</span>
+                        <div className='flex items-center justify-around text-sm gap-1'>
+                            <span className=' text-price font-bold'>{attributes?.price}</span>
+                            <span className='font-normal text-desc'>{attributes?.acreage}</span>
+                            <span className='font-normal text-main hover:underline cursor-pointer'>{address}</span>
                         </div>
-                        <small className='text-xs text-desc flex justify-end'>1 ngày trước</small>
+                        <small className='text-xs text-desc flex justify-end'>{attributes?.published}</small>
                     </div>
-
-                    <p className='text-desc text-sm'>
-                        NHÀ CHO THUÊ 5/99/ Nơ Trang Long P7 Bình Thạnh CÓ cổng riêng ko chung chủ ở được 5 6 bạn thỏa mái Nhà mới sơn sửa sạch thoáng mátNguyên căn, có gác…
+                    {/* whitespace-nowrap */}
+                    <p className='text-desc text-sm w-full text-ellipsis overflow-hidden h-[100px]'>
+                        {`${description}`}
                     </p>
 
                     <div className='flex justify-between items-center'>
@@ -52,11 +53,11 @@ const Item = () => {
                                 src='https://icon-library.com/images/no-user-image-icon/no-user-image-icon-0.jpg'
                                 className='w-[30px] h-[30px] rounded-full'
                             />
-                            <span className='text-sm text-desc'>Co dung</span>
+                            <span className='text-sm text-desc'>{user?.name}</span>
                         </div>
                         <div className='flex items-center gap-1'>
-                            <Button bgColor={'bg-secondary1'} textColor={'text-white'} text={'Gọi 0908777457'} />
-                            <Button bgColor={'bg-secondary1'} textColor={'text-white'} text={'Nhắn Zalo'} />
+                            <Button bgColor={'bg-secondary1'} textColor={'text-white'} text={`Gọi ${user?.phone}`} />
+                            <Button bgColor={'bg-secondary1'} textColor={'text-white'} text={`Zalo ${user?.zalo}`} />
                         </div>
                     </div>
 

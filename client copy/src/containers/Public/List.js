@@ -1,7 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, Item } from '../../components'
+import { useDispatch, useSelector } from 'react-redux'
+import { getPosts } from '../../store/actions/post'
 
 const List = () => {
+    const dispatch = useDispatch()
+    const { posts } = useSelector(state => state.post)
+    useEffect(() => {
+        dispatch(getPosts())
+    }, [])
+    console.log(posts)
     return (
         <div className='w-full py-5 bg-white shadow-md rounded-md text-main '>
             <div className='px-5'>
@@ -13,7 +21,22 @@ const List = () => {
                 <Button bgColor='bg-gray-200' text={'Mới nhất'} />
                 <Button bgColor='bg-gray-200' text={'Có Video'} />
             </div>
-            <div ><Item /></div>
+            <div >
+                {posts.length > 0 && posts.map(item => {
+                    return (
+                        <Item
+                            key={item?.id}
+                            address={item?.address}
+                            attributes={item?.attributes}
+                            images={JSON.parse(item?.images?.image)}
+                            star={item?.star}
+                            description={JSON.parse(item?.description)}
+                            title={item?.title}
+                            user={item?.user}
+                        />
+                    )
+                })}
+            </div>
         </div>
     )
 }
