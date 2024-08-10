@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react'
 import { Button, Item } from '../../components'
 import { useDispatch, useSelector } from 'react-redux'
-import { getPosts } from '../../store/actions/post'
+import { getPosts, getPostsLimit } from '../../store/actions/post'
 
 const List = () => {
     const dispatch = useDispatch()
-    const { posts } = useSelector(state => state.post)
+    const { posts,count } = useSelector(state => state.post)
     useEffect(() => {
-        dispatch(getPosts())
+        dispatch(getPostsLimit())
     }, [])
-    console.log(posts)
+    console.log(count)
     return (
         <div className='w-full py-5 bg-white shadow-md rounded-md text-main '>
             <div className='px-5'>

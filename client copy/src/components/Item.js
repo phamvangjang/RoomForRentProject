@@ -15,34 +15,36 @@ const Item = ({ images, user, title, description, star, attributes, address }) =
                                 key={index}
                                 src={i}
                                 alt='preview'
-                                className='w-[160px] h-[140px] object-cover'
+                                className='w-[130px] h-[130px] object-cover'
                             />
                         )
                     })}
-                    <span className='px-2 rounded-md bg-overlay70 text-white absolute left-3 bottom-1'>{`${images?.length} ảnh`}</span>
+                    <span className='px-2 rounded-md bg-overlay70 text-white absolute left-2 bottom-3'>{`${images?.length} ảnh`}</span>
                     <span
                         onMouseEnter={() => setHoverHeart(true)}
                         onMouseLeave={() => setHoverHeart(false)}
-                        className='absolute bottom-1 right-5 text-white cursor-pointer'>
+                        className='absolute bottom-3 right-2 text-white cursor-pointer'>
                         {hoverHeart ? <FaHeart size={26} color='red' bgColor='red' /> : <FaRegHeart size={26} />}
                     </span>
                 </div>
                 <div className='w-[60%] pl-3 flex flex-col gap-4'>
                     <div className='flex items-start'>
                         <span className='flex items-center gap-1 text-yellow-400'><FaStar /><FaStar /><FaStar /><FaStar /><FaStar /></span>
-                        <h2 className='text-sm text-title font-semibold'>{title}</h2>
+                        <h2 className='text-sm text-title font-semibold whitespace-normal text-ellipsis'>{title}</h2>
                     </div>
 
                     <div className='flex flex-col gap-1'>
-                        <div className='flex items-center justify-around text-sm gap-1'>
+                        <div className='flex items-center justify-between text-sm gap-1'>
                             <span className=' text-price font-bold'>{attributes?.price}</span>
                             <span className='font-normal text-desc'>{attributes?.acreage}</span>
-                            <span className='font-normal text-main hover:underline cursor-pointer'>{address}</span>
+                            <span className='font-normal text-main hover:underline cursor-pointer'>
+                            {`${address.split(',')[address.split(',').length-2]}${address.split(',')[address.split(',').length-1]}`}
+                            </span>
                         </div>
                         <small className='text-xs text-desc flex justify-end'>{attributes?.published}</small>
                     </div>
-                    {/* whitespace-nowrap */}
-                    <p className='text-desc text-sm w-full text-ellipsis overflow-hidden h-[100px]'>
+                    {/* whitespace-nowrap text-ellipsis*/}
+                    <p className='text-desc text-sm w-full text-ellipsis overflow-hidden h-[100px] whitespace-normal'>
                         {`${description}`}
                     </p>
 
@@ -55,9 +57,9 @@ const Item = ({ images, user, title, description, star, attributes, address }) =
                             />
                             <span className='text-sm text-desc'>{user?.name}</span>
                         </div>
-                        <div className='flex items-center gap-1'>
-                            <Button bgColor={'bg-secondary1'} textColor={'text-white'} text={`Gọi ${user?.phone}`} />
-                            <Button bgColor={'bg-secondary1'} textColor={'text-white'} text={`Zalo ${user?.zalo}`} />
+                        <div className='flex items-center gap-1 text-sm'>
+                            <Button bgColor={'bg-secondary1'} size={14} textColor={'text-white'} text={`Gọi ${user?.phone}`} />
+                            <Button bgColor={'bg-secondary1'} size={14} textColor={'text-white'} text={`Zalo ${user?.zalo}`} />
                         </div>
                     </div>
 

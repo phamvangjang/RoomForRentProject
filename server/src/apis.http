@@ -28,3 +28,7 @@ Content-Type: application/json
 ### get posts 
 GET http://localhost:5000/api/post/
 Content-Type: application/json
+
+### get posts limit
+GET http://localhost:5000/api/post/limit?page=2
+Content-Type: application/json
