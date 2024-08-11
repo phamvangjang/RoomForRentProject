@@ -9,9 +9,9 @@ const List = () => {
     useEffect(() => {
         dispatch(getPostsLimit())
     }, [])
-    console.log(count)
+    // console.log(count)
     return (
-        <div className='w-full py-5 bg-white shadow-md rounded-md text-main '>
+        <div className='w-full py-5 shadow-md rounded-md text-main bg-white'>
             <div className='px-5'>
                 <h1 className='text-lg font-bold '>Tổng 129.972 kết quả</h1>
             </div>
@@ -37,6 +37,7 @@ const List = () => {
                     )
                 })}
             </div>
+            
         </div>
     )
 }
