@@ -4,8 +4,12 @@ import Province from '../../components/Province'
 import List from './List'
 import Pagination from './Pagination'
 import { useSearchParams } from 'react-router-dom'
+import { ItemSidebar } from '../../components'
+import { useSelector } from 'react-redux'
 
 const Homepage = () => {
+  const { categories } = useSelector(state => state.app)
+  // console.log(categories)
   const [parmas] = useSearchParams()
   // console.log(parmas.get('page'))
   return (
@@ -18,10 +22,21 @@ const Homepage = () => {
       <Province />
       <div className='flex w-full gap-4'>
         <div className='w-[70%] '>
-          <List page={parmas.get('page')}/>
-          <Pagination page={parmas.get('page')}/>
+          <List page={parmas.get('page')} />
+          <Pagination page={parmas.get('page')} />
         </div>
-        <div className='w-[30%] border border-red-400'>sideber</div>
+        <div className='w-[30%] flex justify-start items-center flex-col gap-5'>
+          <ItemSidebar
+            content={categories}
+            title={'Danh mục cho thuê'}
+          />
+          <ItemSidebar
+            title={'Xem theo giá'}
+          />
+          <ItemSidebar
+            title={'Xem theo diện tích'}
+          />
+        </div>
       </div>
     </div>
   )

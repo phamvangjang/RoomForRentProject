@@ -2,19 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { apiGetCategories } from '../../services/category'
 import { formatSlug } from '../../ultils/constant'
+import { useDispatch, useSelector } from 'react-redux'
+import * as actions from '../../store/actions'
 
 
 const Navigation = () => {
-    const [categories, setCategories] = useState([])
+    const { categories } = useSelector(state => state.app)
+    const dispatch = useDispatch()
+    // const [categories, setCategories] = useState([])
     useEffect(() => {
-        const fetchCategories = async () => {
-            const response = await apiGetCategories()
-            // console.log(response)
-            if (response?.data?.success) {
-                setCategories(response.data.response)
-            }
-        }
-        fetchCategories()
+        
+        dispatch(actions.getCategories())
     }, [])
 
     const noActive = 'hover:bg-secondary2 px-4 h-full items-center flex '
