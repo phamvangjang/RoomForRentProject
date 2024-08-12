@@ -3,9 +3,9 @@ require('dotenv').config()
 const cors = require('cors')
 const initRoutes = require('./src/routes')
 const connectdb = require('./src/config/connectdb')
-const generateCode = require('./src/ultils/generateCode')
+const { dataPrice, dataArea } = require('./src/ultils/data')
 
-
+console.log(dataArea)
 const app = express()
 app.use(cors({
     origin: process.env.CLIENT_URL,

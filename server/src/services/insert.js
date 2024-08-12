@@ -5,6 +5,8 @@ require('dotenv').config()
 const chothuecanho = require('../../data/chothuecanho.json')
 const dataBody = chothuecanho.body
 const { generateCode } = require('../ultils/generateCode')
+const { dataPrice, dataArea } = require('../ultils/data')
+const { getNumberFromString } = require('../ultils/common')
 
 const hashPassword = password => bcrypt.hashSync(password, bcrypt.genSaltSync(12))
 
@@ -17,6 +19,8 @@ const insertService = () => new Promise(async (resolve, reject) => {
             let userId = v4()
             let overviewId = v4()
             let imagesId = v4()
+            let currentArea = getNumberFromString(item?.header?.attributes?.acreage)
+            let currentPrice = getNumberFromString(item?.header?.attributes?.price)
             await db.Post.create({
                 id: postId,
                 title: item?.header?.title,
@@ -28,7 +32,9 @@ const insertService = () => new Promise(async (resolve, reject) => {
                 description: JSON.stringify(item?.mainContent?.content),
                 userId,
                 overviewId,
-                imagesId
+                imagesId,
+                priceCode: dataPrice.find(price => price.max > currentPrice && price.min <= currentPrice)?.code,
+                areaCode: dataArea.find(area => area.max > currentArea && area.min <= currentArea)?.code
             })
             await db.Attribute.create({
                 id: attributesId,
