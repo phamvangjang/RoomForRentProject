@@ -1,6 +1,14 @@
-import logo from './logo.svg';
 import { Routes, Route } from 'react-router-dom';
-import { Home, Homepage, Login, RentalApartment, RentalHouse, RentalRoom, RentalSpace } from './containers/Public';
+import {
+  DetailPost,
+  Home,
+  Homepage,
+  Login,
+  RentalApartment,
+  RentalHouse,
+  RentalRoom,
+  RentalSpace
+} from './containers/Public';
 import { path } from './ultils/constant'
 
 function App() {
@@ -14,6 +22,7 @@ function App() {
           <Route path={path.CHO_THUE_MAT_BANG} element={<RentalSpace />} />
           <Route path={path.CHO_THUE_PHONG_TRO} element={<RentalRoom />} />
           <Route path={path.NHA_CHO_THUE} element={<RentalHouse />} />
+          <Route path={path.DETAIL_POST__TITLE__POSTID} element={<DetailPost />} />
         </Route>
       </Routes>
     </div>

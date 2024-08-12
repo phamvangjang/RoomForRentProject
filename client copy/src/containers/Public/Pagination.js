@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { PageNumber } from '../../components'
-import { GrNext } from "react-icons/gr";
 import { useEffect } from 'react';
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 
-const Pagination = ({ number }) => {
+const Pagination = ({ page }) => {
     const [isHideEnd, setIsHideEnd] = useState(false)
     const [isHideStart, setIsHideStart] = useState(false)
     const { count, posts } = useSelector(state => state.post)
     const [arrPage, setArrPage] = useState([])
-    const [currentPage, setCurrentPage] = useState(+number)
+    const [currentPage, setCurrentPage] = useState(+page || 1)
     useEffect(() => {
         let maxPage = Math.floor(count / posts.length)
         let end = (currentPage + 1) > maxPage ? maxPage : (currentPage + 1)

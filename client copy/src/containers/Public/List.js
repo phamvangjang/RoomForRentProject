@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { memo, useEffect } from 'react'
 import { Button, Item } from '../../components'
 import { useDispatch, useSelector } from 'react-redux'
 import { getPosts, getPostsLimit } from '../../store/actions/post'
 
-const List = () => {
+const List = ({ page }) => {
     const dispatch = useDispatch()
-    const { posts,count } = useSelector(state => state.post)
+    const { posts } = useSelector(state => state.post)
     useEffect(() => {
-        dispatch(getPostsLimit())
-    }, [])
-    // console.log(count)
+        let offset = page ? +page - 1 : 0
+        dispatch(getPostsLimit(offset))
+    }, [page])
+    // console.log(page)
     return (
         <div className='w-full py-5 shadow-md rounded-md text-main bg-white'>
             <div className='px-5'>
@@ -33,13 +34,14 @@ const List = () => {
                             description={JSON.parse(item?.description)}
                             title={item?.title}
                             user={item?.user}
+                            id={item?.id}
                         />
                     )
                 })}
             </div>
-            
+
         </div>
     )
 }
 
-export default List
+export default memo(List)

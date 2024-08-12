@@ -1,15 +1,24 @@
 import React, { memo, useState } from 'react'
 import { FaStar, FaHeart, FaRegHeart } from "react-icons/fa";
 import { Button } from '../components'
+import { Link, useNavigate } from 'react-router-dom';
 
 const indexs = [0, 1, 2, 3];
-const Item = ({ images, user, title, description, star, attributes, address }) => {
+const Item = ({ images, user, title, description, star, attributes, address, id }) => {
+    const navigate = useNavigate()
     const [hoverHeart, setHoverHeart] = useState(false)
+    const handleStar = (star) => {
+        let stars = []
+        for (let i = 1; i <= +star; i++) stars.push(<FaStar />)
+        return stars
+    }
     return (
         <div className='w-full bg-secondary3 border-t-2 border-[#E13427]'>
             <div className='w-full flex py-4 px-5'>
-                <div className='w-[40%] flex flex-wrap items-center justify-center relative cursor-pointer gap-[2px]'>
-                    {images.length > 0 && images.filter((i, index) => indexs.some(i => i === index))?.map((i,index) => {
+                <Link
+                    to={`chi-tiet/${title}/${id}`}
+                    className='w-[40%] flex flex-wrap items-center justify-center relative cursor-pointer gap-[2px]'>
+                    {images.length > 0 && images.filter((i, index) => indexs.some(i => i === index))?.map((i, index) => {
                         return (
                             <img
                                 key={index}
@@ -26,10 +35,16 @@ const Item = ({ images, user, title, description, star, attributes, address }) =
                         className='absolute bottom-3 right-2 text-white cursor-pointer'>
                         {hoverHeart ? <FaHeart size={26} color='red' bgColor='red' /> : <FaRegHeart size={26} />}
                     </span>
-                </div>
+                </Link>
                 <div className='w-[60%] pl-3 flex flex-col gap-4'>
                     <div className='flex items-start'>
-                        <span className='flex items-center gap-1 text-yellow-400'><FaStar /><FaStar /><FaStar /><FaStar /><FaStar /></span>
+                        <span className='flex items-center gap-1 text-yellow-400'>
+                            {handleStar.length > 0 && handleStar(+star).map((star, number) => {
+                                return (
+                                    <span key={number}>{star}</span>
+                                )
+                            })}
+                        </span>
                         <h2 className='text-sm text-title font-semibold whitespace-normal text-ellipsis'>{title}</h2>
                     </div>
 
@@ -38,7 +53,7 @@ const Item = ({ images, user, title, description, star, attributes, address }) =
                             <span className=' text-price font-bold'>{attributes?.price}</span>
                             <span className='font-normal text-desc'>{attributes?.acreage}</span>
                             <span className='font-normal text-main hover:underline cursor-pointer'>
-                            {`${address.split(',')[address.split(',').length-2]}${address.split(',')[address.split(',').length-1]}`}
+                                {`${address.split(',')[address.split(',').length - 2]}${address.split(',')[address.split(',').length - 1]}`}
                             </span>
                         </div>
                         <small className='text-xs text-desc flex justify-end'>{attributes?.published}</small>
@@ -58,8 +73,16 @@ const Item = ({ images, user, title, description, star, attributes, address }) =
                             <span className='text-sm text-desc'>{user?.name}</span>
                         </div>
                         <div className='flex items-center gap-1 text-sm'>
-                            <Button bgColor={'bg-secondary1'} size={14} textColor={'text-white'} text={`Gọi ${user?.phone}`} />
-                            <Button bgColor={'bg-secondary1'} size={14} textColor={'text-white'} text={`Zalo ${user?.zalo}`} />
+                            <Button
+                                bgColor={'bg-secondary1'}
+                                size={14}
+                                textColor={'text-white'}
+                                text={`Gọi ${user?.phone}`} />
+                            <Button
+                                bgColor={'bg-secondary1'}
+                                size={14}
+                                textColor={'text-white'}
+                                text={`Zalo ${user?.zalo}`} />
                         </div>
                     </div>
 

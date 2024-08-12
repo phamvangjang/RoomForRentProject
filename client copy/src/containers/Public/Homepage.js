@@ -18,8 +18,8 @@ const Homepage = () => {
       <Province />
       <div className='flex w-full gap-4'>
         <div className='w-[70%] '>
-          <List />
-          <Pagination number={parmas.get('page')}/>
+          <List page={parmas.get('page')}/>
+          <Pagination page={parmas.get('page')}/>
         </div>
         <div className='w-[30%] border border-red-400'>sideber</div>
       </div>

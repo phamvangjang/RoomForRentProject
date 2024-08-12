@@ -1,21 +1,28 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import logo from '../../assets/logo.png'
 import { Button } from '../../components'
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { path } from '../../ultils/constant';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/actions'
 
 const Header = () => {
+    const [searchParams] = useSearchParams()
+    const headerRef = useRef()
     const dispatch = useDispatch()
     const { isLoggedIn } = useSelector(state => state.auth)
     const navigate = useNavigate();
     const goLogin = useCallback((flag) => {
         navigate(path.LOGIN, { state: { flag } });
     }, [])
+    useEffect(() => {
+        headerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, [searchParams.get('page')])
     return (
-        <div className='container mx-auto flex items-center justify-between'>
+        <div
+            ref={headerRef}
+            className='container mx-auto flex items-center justify-between'>
             <Link to={'/'}>
                 <img
                     src={logo}
