@@ -32,3 +32,11 @@ Content-Type: application/json
 ### get posts limit
 GET http://localhost:5000/api/post/limit/?page=0
 Content-Type: application/json
+
+### get prices
+GET http://localhost:5000/api/price/
+Content-Type: application/json
+
+### get areas
+GET http://localhost:5000/api/area/
+Content-Type: application/json

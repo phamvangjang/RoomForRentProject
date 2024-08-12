@@ -2,8 +2,9 @@ const db = require('../models')
 const bcrypt = require('bcrypt')
 const { v4 } = require('uuid')
 require('dotenv').config()
-const chothuecanho = require('../../data/chothuecanho.json')
-const dataBody = chothuecanho.body
+// const chothuecanho = require('../../data/chothuecanho.json')
+const nhachothue = require('../../data/nhachothue.json')
+const dataBody = nhachothue.body
 const { generateCode } = require('../ultils/generateCode')
 const { dataPrice, dataArea } = require('../ultils/data')
 const { getNumberFromString } = require('../ultils/common')
@@ -77,7 +78,28 @@ const insertService = () => new Promise(async (resolve, reject) => {
         reject(error)
     }
 })
-
+const createPricesAndAreas = () => new Promise(async (resolve, reject) => {
+    try {
+        dataPrice.forEach(async (item, index) => {
+            await db.Price.create({
+                code: item.code,
+                value: item.value,
+                order: index + 1
+            })
+        })
+        dataArea.forEach(async (item, index) => {
+            await db.Area.create({
+                code: item.code,
+                value: item.value,
+                order: index + 1
+            })
+        })
+        resolve('done')
+    } catch (error) {
+        reject(error)
+    }
+})
 module.exports = {
-    insertService
+    insertService,
+    createPricesAndAreas
 }
