@@ -21,9 +21,9 @@ const getPosts = asyncHandler(async (req, res) => {
 })
 
 const getPostsLimit = asyncHandler(async (req, res) => {
-    const { page } = req.query
+    const { page, ...query } = req.query
     try {
-        const response = await postService.getPostsLimitService(page)
+        const response = await postService.getPostsLimitService(page, query)
         return res.status(200).json(response)
     } catch (error) {
         return res.json({

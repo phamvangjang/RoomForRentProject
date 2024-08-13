@@ -1,15 +1,23 @@
 import React, { memo, useEffect } from 'react'
 import { Button, Item } from '../../components'
 import { useDispatch, useSelector } from 'react-redux'
-import { getPosts, getPostsLimit } from '../../store/actions/post'
+import { getPostsLimit } from '../../store/actions/post'
+import { useSearchParams } from 'react-router-dom'
 
-const List = ({ page }) => {
+const List = () => {
+    const [searchParams] = useSearchParams()
     const dispatch = useDispatch()
     const { posts } = useSelector(state => state.post)
     useEffect(() => {
-        let offset = page ? +page - 1 : 0
-        dispatch(getPostsLimit(offset))
-    }, [page])
+        let params = []
+        for (let entry of searchParams.entries()) {
+            params.push(entry);
+        }
+        let searchParamsObject = {}
+        params?.map(i => { searchParamsObject = { ...searchParamsObject, [i[0]]: i[1] } })
+        // console.log(searchParamsObject)
+        dispatch(getPostsLimit(searchParamsObject))
+    }, [searchParams])
     // console.log(page)
     return (
         <div className='w-full py-5 shadow-md rounded-md text-main bg-white'>

@@ -11,7 +11,7 @@ const Pagination = ({ page }) => {
     const [arrPage, setArrPage] = useState([])
     const [currentPage, setCurrentPage] = useState(+page || 1)
     useEffect(() => {
-        let maxPage = Math.floor(count / posts.length)
+        let maxPage = Math.ceil(count / process.env.REACT_APP_LIMIT_POSTS)
         let end = (currentPage + 1) > maxPage ? maxPage : (currentPage + 1)
         let start = (currentPage - 1) <= 0 ? 1 : (currentPage - 1)
         let temp = []

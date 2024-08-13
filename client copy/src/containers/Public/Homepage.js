@@ -14,6 +14,7 @@ const Homepage = () => {
   // console.log(categories)
   const [parmas] = useSearchParams()
   useEffect(() => {
+    
     dispatch(actions.getPrices())
     dispatch(actions.getAreas())
   }, [])
@@ -28,7 +29,7 @@ const Homepage = () => {
       <Province />
       <div className='flex w-full gap-4'>
         <div className='w-[70%] '>
-          <List page={parmas.get('page')} />
+          <List />
           <Pagination page={parmas.get('page')} />
         </div>
         <div className='w-[30%] flex justify-start items-center flex-col gap-5'>
@@ -39,6 +40,7 @@ const Homepage = () => {
           <ItemSidebar
             content={prices}
             isDouble={true}
+            type='priceCode'
             title={'Xem theo giá'}
           />
           <ItemSidebar
