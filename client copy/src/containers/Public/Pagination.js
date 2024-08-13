@@ -3,13 +3,15 @@ import { useSelector } from 'react-redux'
 import { PageNumber } from '../../components'
 import { useEffect } from 'react';
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
+import { useSearchParams } from 'react-router-dom';
 
-const Pagination = ({ page }) => {
+const Pagination = () => {
+    const [searchParmas] = useSearchParams()
     const [isHideEnd, setIsHideEnd] = useState(false)
     const [isHideStart, setIsHideStart] = useState(false)
     const { count, posts } = useSelector(state => state.post)
     const [arrPage, setArrPage] = useState([])
-    const [currentPage, setCurrentPage] = useState(+page || 1)
+    const [currentPage, setCurrentPage] = useState(1)
     useEffect(() => {
         let maxPage = Math.ceil(count / process.env.REACT_APP_LIMIT_POSTS)
         let end = (currentPage + 1) > maxPage ? maxPage : (currentPage + 1)
@@ -21,6 +23,11 @@ const Pagination = ({ page }) => {
         currentPage <= 2 ? setIsHideStart(true) : setIsHideStart(false)
 
     }, [count, posts, currentPage])
+    useEffect(() => {
+        let page = searchParmas.get('page')
+        page && +page !== currentPage && setCurrentPage(+page)
+        !page && setCurrentPage(1)
+    }, [searchParmas])
     return (
         <div className='flex items-center justify-center gap-1 mt-5 mb-12'>
             {!isHideStart &&

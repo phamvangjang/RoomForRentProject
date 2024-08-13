@@ -3,7 +3,6 @@ import { text, location } from '../../ultils/constant'
 import Province from '../../components/Province'
 import List from './List'
 import Pagination from './Pagination'
-import { useSearchParams } from 'react-router-dom'
 import { ItemSidebar } from '../../components'
 import { useDispatch, useSelector } from 'react-redux'
 import * as actions from '../../store/actions'
@@ -12,9 +11,9 @@ const Homepage = () => {
   const dispatch = useDispatch()
   const { categories, prices, areas } = useSelector(state => state.app)
   // console.log(categories)
-  const [parmas] = useSearchParams()
+
   useEffect(() => {
-    
+
     dispatch(actions.getPrices())
     dispatch(actions.getAreas())
   }, [])
@@ -30,7 +29,7 @@ const Homepage = () => {
       <div className='flex w-full gap-4'>
         <div className='w-[70%] '>
           <List />
-          <Pagination page={parmas.get('page')} />
+          <Pagination />
         </div>
         <div className='w-[30%] flex justify-start items-center flex-col gap-5'>
           <ItemSidebar
@@ -46,6 +45,7 @@ const Homepage = () => {
           <ItemSidebar
             content={areas}
             isDouble={true}
+            type='areaCode'
             title={'Xem theo diện tích'}
           />
         </div>

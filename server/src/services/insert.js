@@ -2,9 +2,9 @@ const db = require('../models')
 const bcrypt = require('bcrypt')
 const { v4 } = require('uuid')
 require('dotenv').config()
-// const chothuecanho = require('../../data/chothuecanho.json')
+const chothuecanho = require('../../data/chothuecanho.json')
 const nhachothue = require('../../data/nhachothue.json')
-const dataBody = nhachothue.body
+const dataBody = chothuecanho.body
 const { generateCode } = require('../ultils/generateCode')
 const { dataPrice, dataArea } = require('../ultils/data')
 const { getNumberFromString } = require('../ultils/common')
