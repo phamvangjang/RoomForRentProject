@@ -32,8 +32,20 @@ const getPostsLimit = asyncHandler(async (req, res) => {
         })
     }
 })
+const getNewPosts = asyncHandler(async (req, res) => {
+    try {
+        const response = await postService.getNewPostsService()
+        return res.status(200).json(response)
+    } catch (error) {
+        return res.json({
+            success: false,
+            msg: 'Can not get new posts'
+        })
+    }
+})
 
 module.exports = {
     getPosts,
-    getPostsLimit
+    getPostsLimit,
+    getNewPosts
 }

@@ -24,3 +24,14 @@ export const apiGetPostsLimit = (query) => new Promise(async (resolve, reject) =
         reject(error)
     }
 })
+export const apiGetNewPosts = () => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'get',
+            url: `post/newPost`,
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+})
