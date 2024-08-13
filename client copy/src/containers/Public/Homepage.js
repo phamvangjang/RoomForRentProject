@@ -3,7 +3,7 @@ import { text, location } from '../../ultils/constant'
 import Province from '../../components/Province'
 import List from './List'
 import Pagination from './Pagination'
-import { ItemSidebar } from '../../components'
+import { ItemSidebar, RelatedPost } from '../../components'
 import { useDispatch, useSelector } from 'react-redux'
 import * as actions from '../../store/actions'
 
@@ -48,6 +48,7 @@ const Homepage = () => {
             type='areaCode'
             title={'Xem theo diện tích'}
           />
+          <RelatedPost />
         </div>
       </div>
     </div>
