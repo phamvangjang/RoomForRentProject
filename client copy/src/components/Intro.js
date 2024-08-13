@@ -2,14 +2,34 @@ import React from 'react'
 import { text } from '../ultils/Common/dataIntro'
 import { FaStar } from 'react-icons/fa'
 import Button from './Button'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { formatVietnameseToString } from '../ultils/Common/formatVnToString'
 
 const stars = [1, 2, 3, 4, 5]
 const Intro = () => {
+    const { categories } = useSelector(state => state.app)
     return (
-        <div className='container mx-auto bg-white rounded-md shadow-md text-main p-5'>
+        <div className='container mx-auto bg-white rounded-md shadow-md text-main p-5 mb-5'>
             <div className='pt-5 px-12 pb-12'>
                 <h3 className='font-bold text-lg items-center justify-center flex'>{text.title}</h3>
-                <p className='text-sm text-center my-3'>{text.description}</p>
+                <p className='text-sm text-center my-3'>
+                    {text.description}
+                    <span>
+                        {categories.length > 0 && categories.map(item => {
+                            return (
+                                <Link
+                                    to={`${formatVietnameseToString(item.value)}`}
+                                    key={item.code}
+                                    className='text-[#1266dd] hover:text-title cursor-pointer font-semibold'
+                                >
+                                    {`${item.value.toLowerCase()}, `}
+                                </Link>
+                            )
+                        })}
+                    </span>
+                    {text.description2}
+                </p>
                 <div className='flex items-center justify-around'>
                     {text.statistic.map((item, index) => {
                         return (
