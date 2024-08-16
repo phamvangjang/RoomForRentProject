@@ -44,3 +44,7 @@ Content-Type: application/json
 ### get areas
 GET http://localhost:5000/api/area/
 Content-Type: application/json
+
+### get province
+GET http://localhost:5000/api/province/
+Content-Type: application/json

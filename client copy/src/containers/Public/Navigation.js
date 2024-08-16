@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { apiGetCategories } from '../../services/category'
 import { formatSlug } from '../../ultils/constant'
 import { useDispatch, useSelector } from 'react-redux'
 import * as actions from '../../store/actions'
@@ -11,7 +10,6 @@ const Navigation = () => {
     const dispatch = useDispatch()
     // const [categories, setCategories] = useState([])
     useEffect(() => {
-        
         dispatch(actions.getCategories())
     }, [])
 

@@ -61,7 +61,7 @@ const insertService = () => new Promise(async (resolve, reject) => {
                     address: item?.header?.address,
                     attributesId,
                     //CTPT, CTCH, NCT, CTMB
-                    categoryCode: 'CTCH',
+                    categoryCode: cate.code,
                     description: JSON.stringify(item?.mainContent?.content),
                     userId,
                     overviewId,

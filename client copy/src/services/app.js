@@ -22,3 +22,14 @@ export const apiGetAreas = () => new Promise(async (resolve, reject) => {
         reject(error)
     }
 })
+export const apiGetProvinces = () => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axios({
+            method: `get`,
+            url: 'province/'
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+})
