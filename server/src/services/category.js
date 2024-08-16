@@ -5,9 +5,6 @@ const getCategoriesService = () => new Promise(async (resolve, reject) => {
     try {
         const response = await db.Category.findAll({
             raw: true,
-            attributes: {
-                exclude: ['createdAt', 'updatedAt']
-            }
         })
         resolve({
             success: response ? true : false,

@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getPostsLimit } from '../../store/actions/post'
 import { useSearchParams } from 'react-router-dom'
 
-const List = () => {
+const List = ({ categoryCode }) => {
+    // console.log(categoryCode)
     const [searchParams] = useSearchParams()
     const dispatch = useDispatch()
     const { posts } = useSelector(state => state.post)
@@ -15,9 +16,10 @@ const List = () => {
         }
         let searchParamsObject = {}
         params?.map(i => { searchParamsObject = { ...searchParamsObject, [i[0]]: i[1] } })
+        if (categoryCode) searchParamsObject.categoryCode = categoryCode
         // console.log(searchParamsObject)
         dispatch(getPostsLimit(searchParamsObject))
-    }, [searchParams])
+    }, [searchParams, categoryCode])
     // console.log(page)
     return (
         <div className='w-full py-5 shadow-md rounded-md text-main bg-white'>

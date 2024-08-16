@@ -16,7 +16,6 @@ const db = require('../models')
 const getCategories = asyncHandler(async (req, res) => {
     const response = await db.Category.findAll({
         raw: true,
-        attributes: ['code', 'value']
     })
     return res.json({
         success: response ? true : false,

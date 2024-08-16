@@ -9,7 +9,7 @@ const RelatedPost = () => {
     useEffect(() => {
         dispatch(actions.getNewPosts())
     }, [])
-    console.log(newPosts)
+    // console.log(newPosts)
     return (
         <div className='bg-white w-full p-5 rounded-md'>
             <h3 className='text-lg font-semibold mb-3'>Tin mới đăng</h3>

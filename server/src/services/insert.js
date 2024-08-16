@@ -2,12 +2,14 @@ const db = require('../models')
 const bcrypt = require('bcrypt')
 const { v4 } = require('uuid')
 require('dotenv').config()
+const chothuephongtro = require('../../data/chothuephongtro.json')
 const chothuecanho = require('../../data/chothuecanho.json')
 const nhachothue = require('../../data/nhachothue.json')
-const dataBody = chothuecanho.body
+const chothuematbang = require('../../data/chothuematbang.json')
 const { generateCode } = require('../ultils/generateCode')
 const { dataPrice, dataArea } = require('../ultils/data')
 const { getNumberFromString } = require('../ultils/common')
+const dataBody = chothuematbang.body
 
 const hashPassword = password => bcrypt.hashSync(password, bcrypt.genSaltSync(12))
 
@@ -29,7 +31,8 @@ const insertService = () => new Promise(async (resolve, reject) => {
                 labelCode,
                 address: item?.header?.address,
                 attributesId,
-                categoryCode: 'CTCH',
+                //CTPT, CTCH, NCT, CTMB
+                categoryCode: 'CTMB',
                 description: JSON.stringify(item?.mainContent?.content),
                 userId,
                 overviewId,

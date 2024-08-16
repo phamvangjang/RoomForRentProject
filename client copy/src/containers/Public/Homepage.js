@@ -1,23 +1,12 @@
-import React, { useEffect } from 'react'
-import { text, location } from '../../ultils/constant'
-import Province from '../../components/Province'
-import List from './List'
-import Pagination from './Pagination'
-import { ItemSidebar, RelatedPost } from '../../components'
-import { useDispatch, useSelector } from 'react-redux'
-import * as actions from '../../store/actions'
+import React from 'react'
+import { text } from '../../ultils/constant'
+import { List, Pagination } from './index'
+import { ItemSidebar, Province, RelatedPost } from '../../components'
+import { useSelector } from 'react-redux'
 
 const Homepage = () => {
-  const dispatch = useDispatch()
   const { categories, prices, areas } = useSelector(state => state.app)
-  // console.log(categories)
 
-  useEffect(() => {
-
-    dispatch(actions.getPrices())
-    dispatch(actions.getAreas())
-  }, [])
-  // console.log(prices)
   return (
     <div className='w-full flex flex-col gap-3'>
 

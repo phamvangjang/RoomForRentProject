@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment'
+import 'moment/locale/vi'
 
 const Sitem = ({ title, price, image, createAt }) => {
     return (
