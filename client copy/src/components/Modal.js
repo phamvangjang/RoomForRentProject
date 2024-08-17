@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GrLinkPrevious } from "react-icons/gr";
 
 const Modal = ({ setIsShowModal, content, name }) => {
@@ -6,15 +6,27 @@ const Modal = ({ setIsShowModal, content, name }) => {
     const [percent1, setPercent1] = useState(0);
     const [percent2, setPercent2] = useState(100);
     useEffect(() => {
-        const activedTrackE1 = document.getElementById('track-active')
+        const activedTrackEl = document.getElementById('track-active')
         if (percent2 <= percent1) {
-            activedTrackE1.style.left = `${percent2}%`
-            activedTrackE1.style.right = `${100 - percent1}%`
+            activedTrackEl.style.left = `${percent2}%`
+            activedTrackEl.style.right = `${100 - percent1}%`
         } else {
-            activedTrackE1.style.left = `${percent1}%`
-            activedTrackE1.style.right = `${100 - percent2}%`
+            activedTrackEl.style.left = `${percent1}%`
+            activedTrackEl.style.right = `${100 - percent2}%`
         }
     }, [percent1, percent2])
+
+    const handleClickStack = (e) => {
+        const stackE1 = document.getElementById('track')
+        const stackRect = stackE1.getBoundingClientRect()
+        let percent = Math.round((e.clientX - stackRect.left) * 100 / stackRect.width, 0)
+        if (Math.abs(percent - percent1) <= (Math.abs(percent - percent2))) {
+            setPercent1(percent)
+        } else {
+            setPercent2(percent)
+        }
+    }
+    const convert100to15 = percent => (Math.ceil(Math.round((percent * 1.5)) / 5) * 5) / 10
     return (
         <div
             onClick={() => setIsShowModal(false)}
@@ -59,19 +71,31 @@ const Modal = ({ setIsShowModal, content, name }) => {
                         })}
                     </div>}
                 {(name === 'area' || name === 'price') &&
-                    <div className='p-10'>
+                    <div className='p-10 py-12'>
                         <div className='flex items-center justify-center flex-col relative'>
+                            <h2
+                                className='absolute z-30 top-[-48px] font-bold text-xl text-[#e97e38]'>
+                                {`${percent1 <= percent2
+                                    ? convert100to15(percent1)
+                                    : convert100to15(percent2)} - 
+                                    ${percent2 > percent1
+                                        ? convert100to15(percent2)
+                                        : convert100to15(percent1)} triệu`}
+                            </h2>
                             <div
+                                id='track'
+                                onClick={handleClickStack}
                                 className='slider-track h-[5px] absolute top-0 bottom-0 w-full bg-gray-400 rounded-full'>
                             </div>
                             <div
                                 id='track-active'
-                                className='slider-track-active h-[5px] absolute top-0 bottom-0 w-full bg-[#ff6600] rounded-full'>
+                                onClick={handleClickStack}
+                                className='slider-track-active h-[5px] absolute top-0 bottom-0 bg-[#ff6600] rounded-full'>
                             </div>
                             <input
                                 max='100'
                                 min='0'
-                                step='5'
+                                step='1'
                                 type='range'
                                 value={percent1}
                                 className='absolute top-0 bottom-0 w-full appearance-none pointer-events-none'
@@ -80,12 +104,16 @@ const Modal = ({ setIsShowModal, content, name }) => {
                             <input
                                 max='100'
                                 min='0'
-                                step='5'
+                                step='1'
                                 type='range'
                                 value={percent2}
                                 className='absolute top-0 bottom-0 w-full appearance-none pointer-events-none'
                                 onChange={(e) => setPercent2(+e.target.value)}
                             />
+                            <div className='absolute z-30 top-6 left-0 right-0 w-full flex justify-between'>
+                                <span className='mx-3'>0</span>
+                                <span className='mr-[-14px]'>15 triệu +</span>
+                            </div>
                         </div>
                     </div>}
             </div>
@@ -93,4 +121,4 @@ const Modal = ({ setIsShowModal, content, name }) => {
     )
 }
 
-export default memo(Modal)
+export default Modal
