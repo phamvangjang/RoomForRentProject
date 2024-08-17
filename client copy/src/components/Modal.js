@@ -8,12 +8,14 @@ const Modal = ({ setIsShowModal, content, name }) => {
     const [percent2, setPercent2] = useState(100);
     useEffect(() => {
         const activedTrackEl = document.getElementById('track-active')
-        if (percent2 <= percent1) {
-            activedTrackEl.style.left = `${percent2}%`
-            activedTrackEl.style.right = `${100 - percent1}%`
-        } else {
-            activedTrackEl.style.left = `${percent1}%`
-            activedTrackEl.style.right = `${100 - percent2}%`
+        if (activedEl) {
+            if (percent2 <= percent1) {
+                activedTrackEl.style.left = `${percent2}%`
+                activedTrackEl.style.right = `${100 - percent1}%`
+            } else {
+                activedTrackEl.style.left = `${percent1}%`
+                activedTrackEl.style.right = `${100 - percent2}%`
+            }
         }
     }, [percent1, percent2])
 
@@ -27,18 +29,34 @@ const Modal = ({ setIsShowModal, content, name }) => {
             setPercent2(percent)
         }
     }
-    const convert100to15 = percent => (Math.ceil(Math.round((percent * 1.5)) / 5) * 5) / 10
-    const convert15to100 = percent => Math.floor((percent / 15) * 100)
+    const convert100toTarget = percent => {
+        return name === 'price'
+            ? (Math.ceil(Math.round((percent * 1.5)) / 5) * 5) / 10
+            : name === 'area'
+                ? (Math.ceil(Math.round((percent * 0.9)) / 5) * 5)
+                : 0
+    }
+    const convert15to100 = percent => {
+        let target = name === 'price' ? '15' : name === 'area' ? 90 : 1
+        return Math.floor((percent / target) * 100)
+    }
     const getNumbers = (string) => string.split(' ').map(item => +item).filter(item => !item === false)
-    const handlePrices = (code, value) => {
+    const getNumbersArea = (string) => string.split(' ').map(item => +item.match(/\d+/)).filter(item => item !== 0)
+    const handleActive = (code, value) => {
         setActivedEl(code)
-        let arrMaxMin = getNumbers(value)
+        let arrMaxMin = name === 'price'
+            ? getNumbers(value)
+            : getNumbersArea(value)
         if (arrMaxMin.length === 1) {
             if (arrMaxMin[0] === 1) {
                 setPercent1(0)
                 setPercent2(convert15to100(1))
             }
-            if (arrMaxMin[0] === 15) {
+            if (arrMaxMin[0] === 20) {
+                setPercent1(0)
+                setPercent2(convert15to100(20))
+            }
+            if (arrMaxMin[0] === 15 || arrMaxMin[0] === 90) {
                 setPercent1(100)
                 setPercent2(100)
             }
@@ -49,8 +67,8 @@ const Modal = ({ setIsShowModal, content, name }) => {
         }
     }
     const handleSubmit = () => {
-        console.log('start: ',convert100to15(percent1))
-        console.log('end: ',convert100to15(percent2))
+        console.log('start: ', convert100toTarget(percent1))
+        console.log('end: ', convert100toTarget(percent2))
     }
     return (
         <div
@@ -75,12 +93,12 @@ const Modal = ({ setIsShowModal, content, name }) => {
                 </div>
                 {(name === 'category' || name === 'province') &&
                     <div
-                        className='p-4 flex flex-col gap-2'>
+                        className='p-4 flex flex-col gap-4'>
                         {content?.map(item => {
                             return (
                                 <span
                                     key={item.code}
-                                    className='flex items-center gap-2 border-b border-gray-200'>
+                                    className='flex items-center gap-3 border-b border-gray-200'>
                                     <input
                                         type='radio'
                                         id={item.code}
@@ -101,11 +119,12 @@ const Modal = ({ setIsShowModal, content, name }) => {
                             <h2
                                 className='absolute z-30 top-[-48px] font-bold text-xl text-[#e97e38]'>
                                 {`${percent1 <= percent2
-                                    ? convert100to15(percent1)
-                                    : convert100to15(percent2)} - 
+                                    ? convert100toTarget(percent1)
+                                    : convert100toTarget(percent2)} - 
                                     ${percent2 > percent1
-                                        ? convert100to15(percent2)
-                                        : convert100to15(percent1)} triệu`}
+                                        ? convert100toTarget(percent2)
+                                        : convert100toTarget(percent1)} 
+                                        ${name === 'price' ? 'triệu' : 'm2'}`}
                             </h2>
                             <div
                                 id='track'
@@ -156,7 +175,7 @@ const Modal = ({ setIsShowModal, content, name }) => {
                                         handleClickTrack(e, 100)
                                     }}
                                     className='mr-[-14px]'>
-                                    15 triệu +
+                                    {(name === 'price' && '15 triệu +') || (name === 'area' && 'Trên 90 m2')}
                                 </span>
                             </div>
                         </div>
@@ -171,7 +190,7 @@ const Modal = ({ setIsShowModal, content, name }) => {
                                 {content?.map(item => {
                                     return (
                                         <button
-                                            onClick={() => handlePrices(item.code, item.value)}
+                                            onClick={() => handleActive(item.code, item.value)}
                                             key={item.code}
                                             className={clsx(`px-4 py-2 rounded-md text-sm cursor-pointer bg-[#f1f1f1] text-main`,
                                                 (item.code === activedEl) && 'bg-secondary4 text-white'
@@ -187,7 +206,7 @@ const Modal = ({ setIsShowModal, content, name }) => {
                 {(name === 'area' || name === 'price') &&
                     <button
                         type='button'
-                        className='w-full bg-[#faa500] text-black text-sm cursor-pointer font-semibold py-3 rounded-b-md uppercase'
+                        className='w-full bg-[#faa500] text-black text-sm cursor-pointer font-semibold py-3 rounded-b-md uppercase '
                         onClick={handleSubmit}>
                         Áp dụng
                     </button>}
