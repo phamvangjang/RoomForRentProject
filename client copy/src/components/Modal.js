@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { GrLinkPrevious } from "react-icons/gr";
+import clsx from 'clsx'
 
 const Modal = ({ setIsShowModal, content, name }) => {
-
+    const [activedEl, setActivedEl] = useState('')
     const [percent1, setPercent1] = useState(0);
     const [percent2, setPercent2] = useState(100);
     useEffect(() => {
@@ -16,10 +17,10 @@ const Modal = ({ setIsShowModal, content, name }) => {
         }
     }, [percent1, percent2])
 
-    const handleClickStack = (e) => {
+    const handleClickTrack = (e, value) => {
         const stackE1 = document.getElementById('track')
         const stackRect = stackE1.getBoundingClientRect()
-        let percent = Math.round((e.clientX - stackRect.left) * 100 / stackRect.width, 0)
+        let percent = value ? value : Math.round((e.clientX - stackRect.left) * 100 / stackRect.width, 0)
         if (Math.abs(percent - percent1) <= (Math.abs(percent - percent2))) {
             setPercent1(percent)
         } else {
@@ -27,6 +28,30 @@ const Modal = ({ setIsShowModal, content, name }) => {
         }
     }
     const convert100to15 = percent => (Math.ceil(Math.round((percent * 1.5)) / 5) * 5) / 10
+    const convert15to100 = percent => Math.floor((percent / 15) * 100)
+    const getNumbers = (string) => string.split(' ').map(item => +item).filter(item => !item === false)
+    const handlePrices = (code, value) => {
+        setActivedEl(code)
+        let arrMaxMin = getNumbers(value)
+        if (arrMaxMin.length === 1) {
+            if (arrMaxMin[0] === 1) {
+                setPercent1(0)
+                setPercent2(convert15to100(1))
+            }
+            if (arrMaxMin[0] === 15) {
+                setPercent1(100)
+                setPercent2(100)
+            }
+        }
+        if (arrMaxMin.length === 2) {
+            setPercent1(convert15to100(arrMaxMin[0]))
+            setPercent2(convert15to100(arrMaxMin[1]))
+        }
+    }
+    const handleSubmit = () => {
+        console.log('start: ',convert100to15(percent1))
+        console.log('end: ',convert100to15(percent2))
+    }
     return (
         <div
             onClick={() => setIsShowModal(false)}
@@ -36,7 +61,7 @@ const Modal = ({ setIsShowModal, content, name }) => {
                     e.stopPropagation()
                     setIsShowModal(true)
                 }}
-                className='w-[30%] rounded-md bg-white'>
+                className='w-[50%] rounded-md bg-white'>
                 <div className='h-[45px] border-b-[1px] border-gray-200 flex items-center px-4'>
                     <span
                         className='cursor-pointer hover:text-gray-400'
@@ -84,12 +109,12 @@ const Modal = ({ setIsShowModal, content, name }) => {
                             </h2>
                             <div
                                 id='track'
-                                onClick={handleClickStack}
+                                onClick={handleClickTrack}
                                 className='slider-track h-[5px] absolute top-0 bottom-0 w-full bg-gray-400 rounded-full'>
                             </div>
                             <div
                                 id='track-active'
-                                onClick={handleClickStack}
+                                onClick={handleClickTrack}
                                 className='slider-track-active h-[5px] absolute top-0 bottom-0 bg-[#ff6600] rounded-full'>
                             </div>
                             <input
@@ -99,7 +124,10 @@ const Modal = ({ setIsShowModal, content, name }) => {
                                 type='range'
                                 value={percent1}
                                 className='absolute top-0 bottom-0 w-full appearance-none pointer-events-none'
-                                onChange={(e) => setPercent1(+e.target.value)}
+                                onChange={(e) => {
+                                    setPercent1(+e.target.value)
+                                    activedEl && setActivedEl('')
+                                }}
                             />
                             <input
                                 max='100'
@@ -108,14 +136,61 @@ const Modal = ({ setIsShowModal, content, name }) => {
                                 type='range'
                                 value={percent2}
                                 className='absolute top-0 bottom-0 w-full appearance-none pointer-events-none'
-                                onChange={(e) => setPercent2(+e.target.value)}
+                                onChange={(e) => {
+                                    setPercent2(+e.target.value)
+                                    activedEl && setActivedEl('')
+                                }}
                             />
                             <div className='absolute z-30 top-6 left-0 right-0 w-full flex justify-between'>
-                                <span className='mx-3'>0</span>
-                                <span className='mr-[-14px]'>15 triệu +</span>
+                                <span
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleClickTrack(e, 0)
+                                    }}
+                                    className='mx-3'>
+                                    0
+                                </span>
+                                <span
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleClickTrack(e, 100)
+                                    }}
+                                    className='mr-[-14px]'>
+                                    15 triệu +
+                                </span>
+                            </div>
+                        </div>
+                        <div
+                            className='mt-20'>
+                            <h3
+                                className='text-main text-sm my-4 font-semibold'>
+                                Chọn nhanh:
+                            </h3>
+                            <div
+                                className='flex items-center gap-2 flex-wrap w-full'>
+                                {content?.map(item => {
+                                    return (
+                                        <button
+                                            onClick={() => handlePrices(item.code, item.value)}
+                                            key={item.code}
+                                            className={clsx(`px-4 py-2 rounded-md text-sm cursor-pointer bg-[#f1f1f1] text-main`,
+                                                (item.code === activedEl) && 'bg-secondary4 text-white'
+                                            )}
+                                        >
+                                            {item.value}
+                                        </button>
+                                    )
+                                })}
                             </div>
                         </div>
                     </div>}
+                {(name === 'area' || name === 'price') &&
+                    <button
+                        type='button'
+                        className='w-full bg-[#faa500] text-black text-sm cursor-pointer font-semibold py-3 rounded-b-md uppercase'
+                        onClick={handleSubmit}>
+                        Áp dụng
+                    </button>}
             </div>
         </div>
     )
