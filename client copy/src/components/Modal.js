@@ -7,12 +7,14 @@ const Modal = ({ setIsShowModal, content, name }) => {
     const [percent2, setPercent2] = useState(100);
     useEffect(() => {
         const activedTrackE1 = document.getElementById('track-active')
-        activedTrackE1.style.left = `${percent1}%`
-    }, [percent1])
-    useEffect(() => {
-        const activedTrackE1 = document.getElementById('track-active')
-        activedTrackE1.style.right = `${100 - percent2}%`
-    }, [percent2])
+        if (percent2 <= percent1) {
+            activedTrackE1.style.left = `${percent2}%`
+            activedTrackE1.style.right = `${100 - percent1}%`
+        } else {
+            activedTrackE1.style.left = `${percent1}%`
+            activedTrackE1.style.right = `${100 - percent2}%`
+        }
+    }, [percent1, percent2])
     return (
         <div
             onClick={() => setIsShowModal(false)}
@@ -73,7 +75,7 @@ const Modal = ({ setIsShowModal, content, name }) => {
                                 type='range'
                                 value={percent1}
                                 className='absolute top-0 bottom-0 w-full appearance-none pointer-events-none'
-                                onChange={(e) => setPercent1(e.target.value)}
+                                onChange={(e) => setPercent1(+e.target.value)}
                             />
                             <input
                                 max='100'
@@ -82,7 +84,7 @@ const Modal = ({ setIsShowModal, content, name }) => {
                                 type='range'
                                 value={percent2}
                                 className='absolute top-0 bottom-0 w-full appearance-none pointer-events-none'
-                                onChange={(e) => setPercent2(e.target.value)}
+                                onChange={(e) => setPercent2(+e.target.value)}
                             />
                         </div>
                     </div>}
