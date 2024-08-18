@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { GrLinkPrevious } from "react-icons/gr";
 import clsx from 'clsx'
 
-const Modal = ({ setIsShowModal, content, name }) => {
+const Modal = ({ setIsShowModal, content, name, handleSubmit, queries }) => {
     const [activedEl, setActivedEl] = useState('')
     const [percent1, setPercent1] = useState(0);
     const [percent2, setPercent2] = useState(100);
@@ -36,7 +36,7 @@ const Modal = ({ setIsShowModal, content, name }) => {
                 ? (Math.ceil(Math.round((percent * 0.9)) / 5) * 5)
                 : 0
     }
-    const convert15to100 = percent => {
+    const convertTo100 = percent => {
         let target = name === 'price' ? '15' : name === 'area' ? 90 : 1
         return Math.floor((percent / target) * 100)
     }
@@ -50,11 +50,11 @@ const Modal = ({ setIsShowModal, content, name }) => {
         if (arrMaxMin.length === 1) {
             if (arrMaxMin[0] === 1) {
                 setPercent1(0)
-                setPercent2(convert15to100(1))
+                setPercent2(convertTo100(1))
             }
             if (arrMaxMin[0] === 20) {
                 setPercent1(0)
-                setPercent2(convert15to100(20))
+                setPercent2(convertTo100(20))
             }
             if (arrMaxMin[0] === 15 || arrMaxMin[0] === 90) {
                 setPercent1(100)
@@ -62,13 +62,9 @@ const Modal = ({ setIsShowModal, content, name }) => {
             }
         }
         if (arrMaxMin.length === 2) {
-            setPercent1(convert15to100(arrMaxMin[0]))
-            setPercent2(convert15to100(arrMaxMin[1]))
+            setPercent1(convertTo100(arrMaxMin[0]))
+            setPercent2(convertTo100(arrMaxMin[1]))
         }
-    }
-    const handleSubmit = () => {
-        console.log('start: ', convert100toTarget(percent1))
-        console.log('end: ', convert100toTarget(percent2))
     }
     return (
         <div
@@ -100,10 +96,15 @@ const Modal = ({ setIsShowModal, content, name }) => {
                                     key={item.code}
                                     className='flex items-center gap-3 border-b border-gray-200'>
                                     <input
+                                        checked={item.code === queries[`${name}Code`] ? true : false}
                                         type='radio'
                                         id={item.code}
                                         value={item.code}
                                         name={name}
+                                        onClick={(e) => handleSubmit(e, {
+                                            [name]: item.value,
+                                            [`${name}Code`]: item.code
+                                        })}
                                     />
                                     <label
                                         htmlFor={item.code}>
@@ -118,13 +119,15 @@ const Modal = ({ setIsShowModal, content, name }) => {
                         <div className='flex items-center justify-center flex-col relative'>
                             <h2
                                 className='absolute z-30 top-[-48px] font-bold text-xl text-[#e97e38]'>
-                                {`${percent1 <= percent2
-                                    ? convert100toTarget(percent1)
-                                    : convert100toTarget(percent2)} - 
-                                    ${percent2 > percent1
-                                        ? convert100toTarget(percent2)
-                                        : convert100toTarget(percent1)} 
-                                        ${name === 'price' ? 'triệu' : 'm2'}`}
+                                {(percent1 === 100 && percent2 === 100)
+                                    ? `Trên ${convert100toTarget(percent1)} ${name === 'price' ? 'triệu' : 'm2'} +`
+                                    : `Từ ${percent1 <= percent2
+                                        ? convert100toTarget(percent1)
+                                        : convert100toTarget(percent2)} - ${percent2 > percent1
+                                            ? convert100toTarget(percent2)
+                                            : convert100toTarget(percent1)} ${name === 'price'
+                                                ? 'triệu'
+                                                : 'm2'}`}
                             </h2>
                             <div
                                 id='track'
@@ -207,11 +210,12 @@ const Modal = ({ setIsShowModal, content, name }) => {
                     <button
                         type='button'
                         className='w-full bg-[#faa500] text-black text-sm cursor-pointer font-semibold py-3 rounded-b-md uppercase '
-                        onClick={handleSubmit}>
+                        // onClick={(e) => handleSubmit(e, { [name]: item.code })}
+                        >
                         Áp dụng
                     </button>}
             </div>
-        </div>
+        </div >
     )
 }
 

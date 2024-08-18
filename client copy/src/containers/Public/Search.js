@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Button, Modal, SearchItem } from '../../components'
 import { FaHotel, FaChevronRight, FaMoneyBill, FaCrop, FaSearch } from "react-icons/fa";
 import { CiLocationOn } from "react-icons/ci";
 import { useSelector } from 'react-redux';
 
 const Search = () => {
+    const [queries, setQueries] = useState({})
     const [name, setName] = useState('')
     const [content, setContent] = useState([])
     const [isShowModal, setIsShowModal] = useState(false)
@@ -14,6 +15,14 @@ const Search = () => {
         setName(name)
         setIsShowModal(true)
     }
+
+    const handleSubmit = useCallback((e, query) => {
+        e.stopPropagation()
+        setQueries(prev => ({ ...prev, ...query }))
+
+        setIsShowModal(false)
+    }, [isShowModal, queries])
+    console.log(queries)
     return (
         <>
             <div
@@ -25,7 +34,8 @@ const Search = () => {
                         IconAfter={<FaChevronRight />}
                         fontWeight
                         IconBefore={<FaHotel />}
-                        text='Phòng trọ, nhà trọ' />
+                        text={queries.category}
+                        defaultText={'Phòng trọ, nhà trọ'} />
                 </span>
                 <span
                     className='h-full flex-1 cursor-pointer'
@@ -33,7 +43,8 @@ const Search = () => {
                     <SearchItem
                         IconAfter={<FaChevronRight />}
                         IconBefore={<CiLocationOn />}
-                        text='Toàn quốc' />
+                        text={queries.province}
+                        defaultText={'Toàn quốc'} />
                 </span>
                 <span
                     className='h-full flex-1 cursor-pointer'
@@ -41,7 +52,8 @@ const Search = () => {
                     <SearchItem
                         IconAfter={<FaChevronRight />}
                         IconBefore={<FaMoneyBill />}
-                        text='Chọn giá' />
+                        text={queries.price}
+                        defaultText={'Chọn giá'} />
                 </span>
                 <span
                     className='h-full flex-1 cursor-pointer'
@@ -49,7 +61,8 @@ const Search = () => {
                     <SearchItem
                         IconAfter={<FaChevronRight />}
                         IconBefore={<FaCrop />}
-                        text='Chọn diện tích' />
+                        text={queries.area}
+                        defaultText={'Chọn diện tích'} />
                 </span>
                 <Button
                     className={'flex-1'}
@@ -62,7 +75,9 @@ const Search = () => {
             {isShowModal && <Modal
                 setIsShowModal={setIsShowModal}
                 name={name}
-                content={content} />}
+                content={content}
+                handleSubmit={handleSubmit} 
+                queries={queries}/>}
         </>
     )
 }
