@@ -3,6 +3,7 @@ import { Button, Modal, SearchItem } from '../../components'
 import { FaHotel, FaChevronRight, FaMoneyBill, FaCrop, FaSearch } from "react-icons/fa";
 import { CiLocationOn } from "react-icons/ci";
 import { useSelector } from 'react-redux';
+import { getNumbersArea, getNumbersPrice } from '../../ultils/Common/getNumbers';
 
 const Search = () => {
     const [queries, setQueries] = useState({})
@@ -10,6 +11,8 @@ const Search = () => {
     const [content, setContent] = useState([])
     const [isShowModal, setIsShowModal] = useState(false)
     const { areas, prices, categories, provinces } = useSelector(state => state.app)
+    console.log(getNumbersPrice(prices))
+    console.log(getNumbersArea(areas))
     const handleShowModal = (content, name) => {
         setContent(content)
         setName(name)
@@ -19,10 +22,9 @@ const Search = () => {
     const handleSubmit = useCallback((e, query) => {
         e.stopPropagation()
         setQueries(prev => ({ ...prev, ...query }))
-
         setIsShowModal(false)
     }, [isShowModal, queries])
-    console.log(queries)
+    // console.log(queries)
     return (
         <>
             <div
