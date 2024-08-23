@@ -4,10 +4,12 @@ import { FaHotel, FaChevronRight, FaMoneyBill, FaCrop, FaSearch } from "react-ic
 import { CiLocationOn } from "react-icons/ci";
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/actions'
-import { getNumbersArea, getNumbersPrice } from '../../ultils/Common/getNumbers';
-import { getCodes, getCodesAreas } from '../../ultils/Common/getCodes';
+import { createSearchParams, useNavigate } from 'react-router-dom';
+import { path } from '../../ultils/constant';
 
 const Search = () => {
+    const navigate = useNavigate()
+    const [defaultText, setDefaultText] = useState('')
     const dispatch = useDispatch()
     const [arrMinMax, setArrMinMax] = useState({})
     const [queries, setQueries] = useState({})
@@ -15,12 +17,12 @@ const Search = () => {
     const [content, setContent] = useState([])
     const [isShowModal, setIsShowModal] = useState(false)
     const { areas, prices, categories, provinces } = useSelector(state => state.app)
-    // console.log(getNumbersPrice(prices))
-    // console.log(getNumbersArea(areas))
-    const handleShowModal = (content, name) => {
+
+    const handleShowModal = (content, name, defaultText) => {
         setContent(content)
         setName(name)
         setIsShowModal(true)
+        setDefaultText(defaultText)
     }
 
     const handleSubmit = useCallback((e, query, arrMaxMin) => {
@@ -29,14 +31,16 @@ const Search = () => {
         setIsShowModal(false)
         arrMaxMin && setArrMinMax(prev => ({ ...prev, arrMaxMin }))
     }, [isShowModal, queries])
-    // console.log(queries)
-    // console.log(getCodesAreas([20, 80], areas))
-    const handleSearch = () =>{
-        const queryCodes = Object.entries(queries).filter(item=>item[0].includes('Code'))
+
+    const handleSearch = () => {
+        const queryCodes = Object.entries(queries).filter(item => item[0].includes('Code')).filter(item => item[1])
         let queryCodesObj = {}
-        queryCodes.forEach(item=>{queryCodesObj[item[0]]=item[1]})
-        console.log(queryCodesObj)
-        dispatch(actions.getPostsLimit(queryCodesObj))
+        queryCodes.forEach(item => { queryCodesObj[item[0]] = item[1] })
+        // dispatch(actions.getPostsLimit(queryCodesObj))
+        navigate({
+            pathname: path.SEARCH,
+            search: createSearchParams(queryCodesObj).toString()
+        })
     }
     return (
         <>
@@ -44,17 +48,17 @@ const Search = () => {
                 className='h-[55px] container mx-auto my-4 py-[10px] px-[10px] bg-[#febb02] rounded-md flex items-center justify-around gap-2' >
                 <span
                     className='h-full flex-1 cursor-pointer'
-                    onClick={() => handleShowModal(categories, 'category')}>
+                    onClick={() => handleShowModal(categories, 'category', 'Tìm tất cả')}>
                     <SearchItem
                         IconAfter={<FaChevronRight />}
                         fontWeight
                         IconBefore={<FaHotel />}
                         text={queries.category}
-                        defaultText={'Phòng trọ, nhà trọ'} />
+                        defaultText={'Tìm tất cả'} />
                 </span>
                 <span
                     className='h-full flex-1 cursor-pointer'
-                    onClick={() => handleShowModal(provinces, 'province')}>
+                    onClick={() => handleShowModal(provinces, 'province', 'Toàn quốc')}>
                     <SearchItem
                         IconAfter={<FaChevronRight />}
                         IconBefore={<CiLocationOn />}
@@ -63,7 +67,7 @@ const Search = () => {
                 </span>
                 <span
                     className='h-full flex-1 cursor-pointer'
-                    onClick={() => handleShowModal(prices, 'price')}>
+                    onClick={() => handleShowModal(prices, 'price', 'Chọn giá')}>
                     <SearchItem
                         IconAfter={<FaChevronRight />}
                         IconBefore={<FaMoneyBill />}
@@ -72,7 +76,7 @@ const Search = () => {
                 </span>
                 <span
                     className='h-full flex-1 cursor-pointer'
-                    onClick={() => handleShowModal(areas, 'area')}>
+                    onClick={() => handleShowModal(areas, 'area', 'Chọn diện tích')}>
                     <SearchItem
                         IconAfter={<FaChevronRight />}
                         IconBefore={<FaCrop />}
@@ -94,7 +98,8 @@ const Search = () => {
                 name={name}
                 content={content}
                 handleSubmit={handleSubmit}
-                queries={queries} />}
+                queries={queries}
+                defaultText={defaultText} />}
         </>
     )
 }

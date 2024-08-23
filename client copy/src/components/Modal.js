@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { getCodes, getCodesAreas } from '../ultils/Common/getCodes';
 import { getNumbersArea, getNumbersPrice } from '../ultils/Common/getNumbers';
 
-const Modal = ({ setIsShowModal, content, name, handleSubmit, queries, arrMinMax }) => {
+const Modal = ({ setIsShowModal, content, name, handleSubmit, queries, arrMinMax, defaultText }) => {
     const [percent1, setPercent1] = useState(name === 'price' && arrMinMax?.priceArr
         ? arrMinMax?.priceArr[0]
         : name === 'area' && arrMinMax?.areaArr ? arrMinMax?.areaArr[0] : 0);
@@ -46,8 +46,6 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries, arrMinMax
         let target = name === 'price' ? '15' : name === 'area' ? 90 : 1
         return Math.floor((percent / target) * 100)
     }
-    // const getNumbers = (string) => string.split(' ').map(item => +item).filter(item => !item === false)
-    // const getNumbersArea = (string) => string.split(' ').map(item => +item.match(/\d+/)).filter(item => item !== 0)
     const handleActive = (code, value) => {
         setActivedEl(code)
         let arrMaxMin = name === 'price'
@@ -73,14 +71,17 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries, arrMinMax
         }
     }
     const handleBeforeSubmit = (e) => {
+        let min = percent1 <= percent2 ? percent1 : percent2
+        let max = percent1 <= percent2 ? percent2 : percent1
+        let arrMinMax = [convert100toTarget(min), convert100toTarget(max)]
         const gaps = name === 'price'
-            ? getCodes([convert100toTarget(percent1), convert100toTarget(percent2)], content)
+            ? getCodes(arrMinMax, content)
             : name === 'area'
-                ? getCodesAreas([convert100toTarget(percent1), convert100toTarget(percent2)], content)
+                ? getCodesAreas(arrMinMax, content)
                 : []
         handleSubmit(e, {
             [`${name}Code`]: gaps?.map(item => item.code),
-            [name]: `Từ ${convert100toTarget(percent1)} - ${convert100toTarget(percent2)} ${name === 'price' ? 'triệu' : 'm2'}`
+            [name]: `Từ ${convert100toTarget(min)} - ${convert100toTarget(max)} ${name === 'price' ? 'triệu' : 'm2'}`
         }, {
             [`${name}Arr`]: [percent1, percent2]
         })
@@ -95,7 +96,7 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries, arrMinMax
                     e.stopPropagation()
                     setIsShowModal(true)
                 }}
-                className='w-[50%] rounded-md bg-white'>
+                className='w-[50%] h-[500px] rounded-md bg-white relative'>
                 <div className='h-[45px] border-b-[1px] border-gray-200 flex items-center px-4'>
                     <span
                         className='cursor-pointer hover:text-gray-400'
@@ -110,6 +111,26 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries, arrMinMax
                 {(name === 'category' || name === 'province') &&
                     <div
                         className='p-4 flex flex-col gap-4'>
+
+                        <span
+                            className='flex items-center gap-3 border-b border-gray-200'>
+                            <input
+                                type='radio'
+                                id='default'
+                                value={defaultText || ''}
+                                name={name}
+                                onChange={(e) => handleSubmit(e, {
+                                    [name]: defaultText,
+                                    [`${name}Code`]: ''
+                                })}
+                                checked={!queries[`${name}Code`] ? true : false}
+                            />
+                            <label
+                                htmlFor='default'>
+                                {defaultText}
+                            </label>
+                        </span>
+
                         {content?.map(item => {
                             return (
                                 <span
@@ -229,7 +250,7 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries, arrMinMax
                 {(name === 'area' || name === 'price') &&
                     <button
                         type='button'
-                        className='w-full bg-[#faa500] text-black text-sm cursor-pointer font-semibold py-3 rounded-b-md uppercase '
+                        className='w-full bg-[#faa500] text-black text-sm cursor-pointer font-semibold py-3 rounded-b-md uppercase absolute bottom-0'
                         onClick={handleBeforeSubmit}
                     >
                         Áp dụng

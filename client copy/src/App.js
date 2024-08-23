@@ -5,6 +5,7 @@ import {
   Homepage,
   Login,
   Rental,
+  SearchDetail,
 } from './containers/Public';
 import { path } from './ultils/constant'
 
@@ -19,6 +20,7 @@ function App() {
           <Route path={path.CHO_THUE_MAT_BANG} element={<Rental />} />
           <Route path={path.CHO_THUE_PHONG_TRO} element={<Rental />} />
           <Route path={path.NHA_CHO_THUE} element={<Rental />} />
+          <Route path={path.SEARCH} element={<SearchDetail />} />
           <Route path={path.DETAIL_POST__TITLE__POSTID} element={<DetailPost />} />
         </Route>
       </Routes>
