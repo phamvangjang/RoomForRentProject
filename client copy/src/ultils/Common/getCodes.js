@@ -9,11 +9,17 @@ export const getCodePrice = (totals) => {
         let sortArr = arr.sort()
         return ({
             ...item,
-            min: sortArr.indexOf(arrMaxMin[0]) === 0 ? 0 : arrMaxMin[0],
-            max: sortArr.indexOf(arrMaxMin[0]) === 0 ? arrMaxMin[0] : sortArr.indexOf(arrMaxMin[0]) === 1 ? 9999999 : arrMaxMin[1],
+            min: sortArr.indexOf(arrMaxMin[0]) === 0
+                ? 0
+                : arrMaxMin[0],
+            max: sortArr.indexOf(arrMaxMin[0]) === 0
+                ? arrMaxMin[0]
+                : sortArr.indexOf(arrMaxMin[0]) === 1
+                    ? 9999999
+                    : arrMaxMin[1],
         })
     })
-} 
+}
 
 export const getCodeArea = (totals) => {
     let arr = []
@@ -24,8 +30,24 @@ export const getCodeArea = (totals) => {
         let sortArr = arr.sort()
         return ({
             ...item,
-            min: sortArr.indexOf(arrMaxMin[0]) === 0 ? 0 : arrMaxMin[0],
-            max: sortArr.indexOf(arrMaxMin[0]) === 0 ? arrMaxMin[0] : sortArr.indexOf(arrMaxMin[0]) === 1 ? 9999999 : arrMaxMin[1],
+            min: sortArr.indexOf(arrMaxMin[0]) === 0
+                ? 0
+                : arrMaxMin[0],
+            max: sortArr.indexOf(arrMaxMin[0]) === 0
+                ? arrMaxMin[0]
+                : sortArr.indexOf(arrMaxMin[0]) === 1
+                    ? 9999999
+                    : arrMaxMin[1],
         })
     })
-} 
+}
+export const getCodes = (arrMinMax, prices) => {
+    const pricesWithMinMax = getCodePrice(prices)
+    return pricesWithMinMax.filter(item => ((item.min >= arrMinMax[0] && item.min <= arrMinMax[0]) ||
+        (item.max >= arrMinMax[0] && item.max <= arrMinMax[1])))
+}
+export const getCodesAreas = (arrMinMax, areas) => {
+    const areasWithMinMax = getCodeArea(areas)
+    return areasWithMinMax.filter(item => ((item.min >= arrMinMax[0] && item.min <= arrMinMax[0]) ||
+        (item.max >= arrMinMax[0] && item.max <= arrMinMax[1])))
+}

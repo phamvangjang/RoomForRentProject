@@ -4,27 +4,31 @@ import { FaHotel, FaChevronRight, FaMoneyBill, FaCrop, FaSearch } from "react-ic
 import { CiLocationOn } from "react-icons/ci";
 import { useSelector } from 'react-redux';
 import { getNumbersArea, getNumbersPrice } from '../../ultils/Common/getNumbers';
+import { getCodes, getCodesAreas } from '../../ultils/Common/getCodes';
 
 const Search = () => {
+    const [arrMinMax, setArrMinMax] = useState({})
     const [queries, setQueries] = useState({})
     const [name, setName] = useState('')
     const [content, setContent] = useState([])
     const [isShowModal, setIsShowModal] = useState(false)
     const { areas, prices, categories, provinces } = useSelector(state => state.app)
-    console.log(getNumbersPrice(prices))
-    console.log(getNumbersArea(areas))
+    // console.log(getNumbersPrice(prices))
+    // console.log(getNumbersArea(areas))
     const handleShowModal = (content, name) => {
         setContent(content)
         setName(name)
         setIsShowModal(true)
     }
 
-    const handleSubmit = useCallback((e, query) => {
+    const handleSubmit = useCallback((e, query, arrMaxMin) => {
         e.stopPropagation()
         setQueries(prev => ({ ...prev, ...query }))
         setIsShowModal(false)
+        arrMaxMin && setArrMinMax(prev => ({ ...prev, arrMaxMin }))
     }, [isShowModal, queries])
     // console.log(queries)
+    // console.log(getCodesAreas([20, 80], areas))
     return (
         <>
             <div
@@ -75,11 +79,12 @@ const Search = () => {
                 />
             </div>
             {isShowModal && <Modal
+                arrMinMax={arrMinMax}
                 setIsShowModal={setIsShowModal}
                 name={name}
                 content={content}
-                handleSubmit={handleSubmit} 
-                queries={queries}/>}
+                handleSubmit={handleSubmit}
+                queries={queries} />}
         </>
     )
 }

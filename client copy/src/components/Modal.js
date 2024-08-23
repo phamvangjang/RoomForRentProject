@@ -1,14 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { GrLinkPrevious } from "react-icons/gr";
 import clsx from 'clsx'
+import { getCodes, getCodesAreas } from '../ultils/Common/getCodes';
+import { getNumbersArea, getNumbersPrice } from '../ultils/Common/getNumbers';
 
-const Modal = ({ setIsShowModal, content, name, handleSubmit, queries }) => {
+const Modal = ({ setIsShowModal, content, name, handleSubmit, queries, arrMinMax }) => {
+    const [percent1, setPercent1] = useState(name === 'price' && arrMinMax?.priceArr
+        ? arrMinMax?.priceArr[0]
+        : name === 'area' && arrMinMax?.areaArr ? arrMinMax?.areaArr[0] : 0);
+    const [percent2, setPercent2] = useState(name === 'price' && arrMinMax?.priceArr
+        ? arrMinMax?.priceArr[1]
+        : name === 'area' && arrMinMax?.areaArr ? arrMinMax?.areaArr[1] : 100);
     const [activedEl, setActivedEl] = useState('')
-    const [percent1, setPercent1] = useState(0);
-    const [percent2, setPercent2] = useState(100);
     useEffect(() => {
         const activedTrackEl = document.getElementById('track-active')
-        if (activedEl) {
+        if (activedTrackEl) {
             if (percent2 <= percent1) {
                 activedTrackEl.style.left = `${percent2}%`
                 activedTrackEl.style.right = `${100 - percent1}%`
@@ -40,12 +46,12 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries }) => {
         let target = name === 'price' ? '15' : name === 'area' ? 90 : 1
         return Math.floor((percent / target) * 100)
     }
-    const getNumbers = (string) => string.split(' ').map(item => +item).filter(item => !item === false)
-    const getNumbersArea = (string) => string.split(' ').map(item => +item.match(/\d+/)).filter(item => item !== 0)
+    // const getNumbers = (string) => string.split(' ').map(item => +item).filter(item => !item === false)
+    // const getNumbersArea = (string) => string.split(' ').map(item => +item.match(/\d+/)).filter(item => item !== 0)
     const handleActive = (code, value) => {
         setActivedEl(code)
         let arrMaxMin = name === 'price'
-            ? getNumbers(value)
+            ? getNumbersPrice(value)
             : getNumbersArea(value)
         if (arrMaxMin.length === 1) {
             if (arrMaxMin[0] === 1) {
@@ -66,6 +72,20 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries }) => {
             setPercent2(convertTo100(arrMaxMin[1]))
         }
     }
+    const handleBeforeSubmit = (e) => {
+        const gaps = name === 'price'
+            ? getCodes([convert100toTarget(percent1), convert100toTarget(percent2)], content)
+            : name === 'area'
+                ? getCodesAreas([convert100toTarget(percent1), convert100toTarget(percent2)], content)
+                : []
+        handleSubmit(e, {
+            [`${name}Code`]: gaps?.map(item => item.code),
+            [name]: `Từ ${convert100toTarget(percent1)} - ${convert100toTarget(percent2)} ${name === 'price' ? 'triệu' : 'm2'}`
+        }, {
+            [`${name}Arr`]: [percent1, percent2]
+        })
+    }
+    // console.log(percent1, percent2)
     return (
         <div
             onClick={() => setIsShowModal(false)}
@@ -101,7 +121,7 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries }) => {
                                         id={item.code}
                                         value={item.code}
                                         name={name}
-                                        onClick={(e) => handleSubmit(e, {
+                                        onChange={(e) => handleSubmit(e, {
                                             [name]: item.value,
                                             [`${name}Code`]: item.code
                                         })}
@@ -147,7 +167,7 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries }) => {
                                 value={percent1}
                                 className='absolute top-0 bottom-0 w-full appearance-none pointer-events-none'
                                 onChange={(e) => {
-                                    setPercent1(+e.target.value)
+                                    setPercent1(+e?.target?.value)
                                     activedEl && setActivedEl('')
                                 }}
                             />
@@ -159,17 +179,17 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries }) => {
                                 value={percent2}
                                 className='absolute top-0 bottom-0 w-full appearance-none pointer-events-none'
                                 onChange={(e) => {
-                                    setPercent2(+e.target.value)
+                                    setPercent2(+e?.target?.value)
                                     activedEl && setActivedEl('')
                                 }}
                             />
-                            <div className='absolute z-30 top-6 left-0 right-0 w-full flex justify-between'>
+                            <div className='absolute z-30 top-6 left-0 right-0 flex justify-between items-center'>
                                 <span
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         handleClickTrack(e, 0)
                                     }}
-                                    className='mx-3'>
+                                    className='cursor-pointer mx-3'>
                                     0
                                 </span>
                                 <span
@@ -177,7 +197,7 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries }) => {
                                         e.stopPropagation()
                                         handleClickTrack(e, 100)
                                     }}
-                                    className='mr-[-14px]'>
+                                    className='cursor-pointer mr-[-14px]'>
                                     {(name === 'price' && '15 triệu +') || (name === 'area' && 'Trên 90 m2')}
                                 </span>
                             </div>
@@ -210,8 +230,8 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries }) => {
                     <button
                         type='button'
                         className='w-full bg-[#faa500] text-black text-sm cursor-pointer font-semibold py-3 rounded-b-md uppercase '
-                        // onClick={(e) => handleSubmit(e, { [name]: item.code })}
-                        >
+                        onClick={handleBeforeSubmit}
+                    >
                         Áp dụng
                     </button>}
             </div>
@@ -219,4 +239,4 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries }) => {
     )
 }
 
-export default Modal
+export default memo(Modal)
