@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Button, Modal, SearchItem } from '../../components'
 import { FaHotel, FaChevronRight, FaMoneyBill, FaCrop, FaSearch } from "react-icons/fa";
 import { CiLocationOn } from "react-icons/ci";
@@ -18,6 +18,13 @@ const Search = () => {
     const [isShowModal, setIsShowModal] = useState(false)
     const { areas, prices, categories, provinces } = useSelector(state => state.app)
 
+    useEffect(() => {
+        if (!location.pathname.includes(path.SEARCH)) {
+            setArrMinMax({})
+            setQueries({})
+        }
+    }, [location])
+
     const handleShowModal = (content, name, defaultText) => {
         setContent(content)
         setName(name)
@@ -36,11 +43,23 @@ const Search = () => {
         const queryCodes = Object.entries(queries).filter(item => item[0].includes('Code')).filter(item => item[1])
         let queryCodesObj = {}
         queryCodes.forEach(item => { queryCodesObj[item[0]] = item[1] })
-        // dispatch(actions.getPostsLimit(queryCodesObj))
+        const queryText = Object.entries(queries).filter(item => !item[0].includes('Code'))
+        let queryTextObj = {}
+        queryText.forEach(item => { queryTextObj[item[0]] = item[1] })
+        let titleSearch = `${queryTextObj.category
+            ? queryTextObj.category
+            : 'Cho thuê tất cả'} ${queryTextObj.province
+                ? `tỉnh/thành ${queryTextObj.province}`
+                : ''} ${queryTextObj.price
+                    ? `giá ${queryTextObj.price}`
+                    : ''} ${queryTextObj.area
+                        ? `diện tích ${queryTextObj.area}`
+                        : ''}`
+        // console.log(titleSearch)
         navigate({
             pathname: path.SEARCH,
             search: createSearchParams(queryCodesObj).toString()
-        })
+        }, { state: { titleSearch } })
     }
     return (
         <>

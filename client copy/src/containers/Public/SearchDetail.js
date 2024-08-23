@@ -3,16 +3,18 @@ import { useSelector } from 'react-redux'
 import List from './List'
 import Pagination from './Pagination'
 import { ItemSidebar, RelatedPost } from '../../components'
+import { useLocation } from 'react-router-dom'
 
 const SearchDetail = () => {
     const { prices, areas } = useSelector(state => state.app)
+    const location = useLocation(state => state.app)
 
     return (
         <div className='w-full flex flex-col gap-3'>
 
             <div className='flex flex-col gap-1'>
-                {/* <h1 className='text-3xl font-bold'>{categoryCurrent?.header}</h1>
-                <p className='text-sm'>{categoryCurrent?.subheader}</p> */}
+                <h1 className='text-3xl font-bold'>{location.state?.titleSearch || 'Kết quả tìm kiếm'}</h1>
+                <p className='text-sm'>{`${location.state?.titleSearch || ''}  giá rẻ, wc riêng, không chung chủ. Chất lượng, thoáng mát, đa dạng diện tích và mức giá.`} </p>
             </div>
             <div className='flex w-full gap-4'>
                 <div className='w-[70%] '>
