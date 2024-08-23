@@ -40,10 +40,10 @@ const Search = () => {
     }, [isShowModal, queries])
 
     const handleSearch = () => {
-        const queryCodes = Object.entries(queries).filter(item => item[0].includes('Code')).filter(item => item[1])
+        const queryCodes = Object.entries(queries).filter(item => item[0].includes('Number') || item[0].includes('Code')).filter(item => item[1])
         let queryCodesObj = {}
         queryCodes.forEach(item => { queryCodesObj[item[0]] = item[1] })
-        const queryText = Object.entries(queries).filter(item => !item[0].includes('Code'))
+        const queryText = Object.entries(queries).filter(item => !item[0].includes('Code') || !item[0].includes('Number'))
         let queryTextObj = {}
         queryText.forEach(item => { queryTextObj[item[0]] = item[1] })
         let titleSearch = `${queryTextObj.category

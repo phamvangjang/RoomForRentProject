@@ -74,16 +74,16 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries, arrMinMax
         let min = percent1 <= percent2 ? percent1 : percent2
         let max = percent1 <= percent2 ? percent2 : percent1
         let arrMinMax = [convert100toTarget(min), convert100toTarget(max)]
-        const gaps = name === 'price'
-            ? getCodes(arrMinMax, content)
-            : name === 'area'
-                ? getCodesAreas(arrMinMax, content)
-                : []
+        // const gaps = name === 'price'
+        //     ? getCodes(arrMinMax, content)
+        //     : name === 'area'
+        //         ? getCodesAreas(arrMinMax, content)
+        //         : []
         handleSubmit(e, {
-            [`${name}Code`]: gaps?.map(item => item.code),
+            [`${name}Number`]: arrMinMax,
             [name]: `Từ ${convert100toTarget(min)} - ${convert100toTarget(max)} ${name === 'price' ? 'triệu' : 'm2'}`
         }, {
-            [`${name}Arr`]: [percent1, percent2]
+            [`${name}Arr`]: [min, max]
         })
     }
     // console.log(percent1, percent2)

@@ -8,7 +8,7 @@ const nhachothue = require('../../data/nhachothue.json')
 const chothuematbang = require('../../data/chothuematbang.json')
 const { generateCode } = require('../ultils/generateCode')
 const { dataPrice, dataArea } = require('../ultils/data')
-const { getNumberFromString } = require('../ultils/common')
+const { getNumberFromString, getNumberFromStringV2 } = require('../ultils/common')
 const dataBody = [
     {
         body: chothuephongtro.body,
@@ -68,7 +68,9 @@ const insertService = () => new Promise(async (resolve, reject) => {
                     imagesId,
                     priceCode: dataPrice.find(price => price.max > currentPrice && price.min <= currentPrice)?.code,
                     areaCode: dataArea.find(area => area.max > currentArea && area.min <= currentArea)?.code,
-                    provinceCode
+                    provinceCode,
+                    priceNumber: getNumberFromStringV2(item?.header?.attributes?.price),
+                    areaNumber: getNumberFromStringV2(item?.header?.attributes?.acreage)
                 })
                 await db.Attribute.create({
                     id: attributesId,
