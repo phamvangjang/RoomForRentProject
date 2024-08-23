@@ -2,11 +2,13 @@ import React, { useCallback, useState } from 'react'
 import { Button, Modal, SearchItem } from '../../components'
 import { FaHotel, FaChevronRight, FaMoneyBill, FaCrop, FaSearch } from "react-icons/fa";
 import { CiLocationOn } from "react-icons/ci";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import * as actions from '../../store/actions'
 import { getNumbersArea, getNumbersPrice } from '../../ultils/Common/getNumbers';
 import { getCodes, getCodesAreas } from '../../ultils/Common/getCodes';
 
 const Search = () => {
+    const dispatch = useDispatch()
     const [arrMinMax, setArrMinMax] = useState({})
     const [queries, setQueries] = useState({})
     const [name, setName] = useState('')
@@ -29,6 +31,13 @@ const Search = () => {
     }, [isShowModal, queries])
     // console.log(queries)
     // console.log(getCodesAreas([20, 80], areas))
+    const handleSearch = () =>{
+        const queryCodes = Object.entries(queries).filter(item=>item[0].includes('Code'))
+        let queryCodesObj = {}
+        queryCodes.forEach(item=>{queryCodesObj[item[0]]=item[1]})
+        console.log(queryCodesObj)
+        dispatch(actions.getPostsLimit(queryCodesObj))
+    }
     return (
         <>
             <div
@@ -71,6 +80,7 @@ const Search = () => {
                         defaultText={'Chọn diện tích'} />
                 </span>
                 <Button
+                    onClick={handleSearch}
                     className={'flex-1'}
                     text={'Search'}
                     textColor='text-white'
