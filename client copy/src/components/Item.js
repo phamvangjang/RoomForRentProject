@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const indexs = [0, 1, 2, 3];
 const Item = ({ images, user, title, description, star, attributes, address, id }) => {
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     const [hoverHeart, setHoverHeart] = useState(false)
     const handleStar = (star) => {
         let stars = []
@@ -24,7 +24,7 @@ const Item = ({ images, user, title, description, star, attributes, address, id 
                                 key={index}
                                 src={i}
                                 alt='preview'
-                                className='w-[130px] h-[130px] object-cover'
+                                className='w-[49%] h-[130px] object-cover'
                             />
                         )
                     })}
