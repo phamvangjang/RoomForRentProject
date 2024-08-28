@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import logo from '../../assets/logo.png'
-import { Button } from '../../components'
+import { Button, User } from '../../components'
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { path } from '../../ultils/constant';
@@ -8,10 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/actions'
 import { menuManage } from '../../ultils/Common/menuManage';
 import { FaSignOutAlt } from "react-icons/fa";
+import { MdApps } from "react-icons/md";
 
 const Header = () => {
     const [isShowMenu, setIsShowMenu] = useState()
-    const { currentData } = useSelector(state => state.user)
     const [searchParams] = useSearchParams()
     const headerRef = useRef()
     const dispatch = useDispatch()
@@ -36,7 +36,7 @@ const Header = () => {
             </Link>
 
             <div className='flex gap-2 items-center'>
-                <small>{`Phongtro123.com Xin chao`}</small>
+                {/* <small>{`Phongtro123.com Xin chao`}</small> */}
                 {!isLoggedIn && <>
                     <Button
                         text={'Sign In'}
@@ -49,9 +49,10 @@ const Header = () => {
                         bgColor='bg-secondary1'
                         onClick={() => { goLogin(true) }} />
                 </>}
-                {isLoggedIn && <div className='flex items-center gap-1 relative'>
-                    <small>{currentData?.name}</small>
+                {isLoggedIn && <div className='flex items-center gap-2 relative'>
+                    <User/>
                     <Button
+                        IcBefore={MdApps}
                         text={'Manage Account'}
                         textColor='text-white'
                         bgColor='bg-secondary1'
@@ -81,7 +82,7 @@ const Header = () => {
                     </div>}
                 </div>}
                 <Button
-                    text={'Sign Up new'}
+                    text={'Create new post'}
                     textColor='text-white'
                     bgColor='bg-secondary2'
                     IcAfter={AiOutlinePlusCircle} />
