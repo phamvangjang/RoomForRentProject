@@ -5,6 +5,7 @@ const postRouter = require('./post')
 const priceRouter = require('./price')
 const areaRouter = require('./area')
 const provinceRouter = require('./province')
+const userRouter = require('./user')
 
 const initRoutes = (app) => {
     app.use('/api/auth', authRouter)
@@ -14,6 +15,7 @@ const initRoutes = (app) => {
     app.use('/api/price', priceRouter)
     app.use('/api/area', areaRouter)
     app.use('/api/province', provinceRouter)
+    app.use('/api/user', userRouter)
 
     return app.use('/', (req, res) => {
         res.send('server on...')

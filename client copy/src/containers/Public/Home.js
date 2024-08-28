@@ -3,21 +3,30 @@ import Header from './Header'
 import { Outlet } from 'react-router-dom'
 import { Navigation, Search } from './index'
 import { Contact, Intro } from '../../components'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import * as actions from '../../store/actions'
+import { apiGetCurrent } from '../../services/user'
 
 const Home = () => {
+    const { isLoggedIn } = useSelector(state => state.auth)
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(actions.getPrices())
         dispatch(actions.getAreas())
         dispatch(actions.getProvinces())
     }, [])
+    useEffect(() => {
+        const fetchCurrent = async () => {
+            const response = await apiGetCurrent()
+            console.log(response)
+        }
+        isLoggedIn && fetchCurrent()
+    }, [isLoggedIn])
     return (
         <div className=' w-full h-full'>
             <Header />
             <Navigation />
-            <Search />
+            {isLoggedIn && <Search />}
             <div className='container mx-auto w-full flex flex-col items-start justify-start mt-3'>
                 <Outlet />
             </div>

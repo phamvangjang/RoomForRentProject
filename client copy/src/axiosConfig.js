@@ -4,16 +4,19 @@ const instance = axios.create({
     baseURL: process.env.REACT_APP_SERVER_URL
 });
 
-// instance.interceptors.request.use(function (config) {
-//     const token = localStorage.getItem('persist:auth')
-//     console.log(token)
-//     // Do something before request is sent
-//     return config;
-// }, function (error) {
-//     // Do something with request error
-//     console.log(error)
-//     return Promise.reject(error);
-// });
+instance.interceptors.request.use(function (config) {
+    const token = window.localStorage.getItem('persist:auth') && JSON.parse(window.localStorage.getItem('persist:auth'))?.token?.slice(1, -1)
+    config.headers={
+        authorization: `Bearer ${token}`
+    }
+    // console.log(token)
+    // Do something before request is sent
+    return config;
+}, function (error) {
+    // Do something with request error
+    // console.log(error)
+    return Promise.reject(error);
+});
 
 // Add a request interceptor
 instance.interceptors.request.use(function (config) {
