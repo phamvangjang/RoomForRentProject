@@ -1,5 +1,5 @@
 import React from 'react'
-import { text } from '../ultils/Common/dataContact'
+import { text } from '../ultils/dataContact'
 import Button from './Button'
 
 const Contact = () => {

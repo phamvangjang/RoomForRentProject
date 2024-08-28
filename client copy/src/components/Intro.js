@@ -1,5 +1,5 @@
 import React from 'react'
-import { text } from '../ultils/Common/dataIntro'
+import { text } from '../ultils/dataIntro'
 import { FaStar } from 'react-icons/fa'
 import Button from './Button'
 import { useSelector } from 'react-redux'
