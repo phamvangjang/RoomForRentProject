@@ -5,10 +5,10 @@ import { Navigation, Search } from './index'
 import { Contact, Intro } from '../../components'
 import { useDispatch, useSelector } from 'react-redux'
 import * as actions from '../../store/actions'
-import { apiGetCurrent } from '../../services/user'
 
 const Home = () => {
     const { isLoggedIn } = useSelector(state => state.auth)
+    const { currentData } = useSelector(state => state.user)
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(actions.getPrices())
@@ -16,11 +16,9 @@ const Home = () => {
         dispatch(actions.getProvinces())
     }, [])
     useEffect(() => {
-        const fetchCurrent = async () => {
-            const response = await apiGetCurrent()
-            console.log(response)
-        }
-        isLoggedIn && fetchCurrent()
+        setTimeout(() => {
+            isLoggedIn && dispatch(actions.getCurrent())
+        }, 1000)
     }, [isLoggedIn])
     return (
         <div className=' w-full h-full'>

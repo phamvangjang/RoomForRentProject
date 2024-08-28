@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/actions'
 
 const Header = () => {
+    const { currentData } = useSelector(state => state.user)
     const [searchParams] = useSearchParams()
     const headerRef = useRef()
     const dispatch = useDispatch()
@@ -32,7 +33,7 @@ const Header = () => {
             </Link>
 
             <div className='flex gap-2 items-center'>
-                <small>Phongtro123.com Xin chao</small>
+                <small>{`Phongtro123.com Xin chao`}</small>
                 {!isLoggedIn && <>
                     <Button
                         text={'Sign In'}
@@ -46,7 +47,7 @@ const Header = () => {
                         onClick={() => { goLogin(true) }} />
                 </>}
                 {isLoggedIn && <div className='flex items-center gap-1'>
-                    <small>name</small>
+                    <small>{currentData?.name}</small>
                     <Button
                         text={'Sign Out'}
                         textColor='text-white'

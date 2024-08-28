@@ -1,0 +1,27 @@
+import * as apis from '../../services'
+import actionTypes from './actionTypes'
+
+export const getCurrent = () => async (dispatch) => {
+    try {
+        const response = await apis.apiGetCurrent()
+        // console.log(response)
+        if (response?.data.success) {
+            dispatch({
+                type: actionTypes.GET_CURRENT,
+                currentData: response.data.response
+            })
+        } else {
+            dispatch({
+                type: actionTypes.GET_CURRENT,
+                msg: response.data.msg,
+                currentData: null
+            })
+        }
+    } catch (error) {
+        dispatch({
+            type: actionTypes.GET_CURRENT,
+            msg: error,
+            currentData: null
+        })
+    }
+}
