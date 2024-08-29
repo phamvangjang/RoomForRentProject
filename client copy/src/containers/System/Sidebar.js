@@ -12,7 +12,7 @@ const Sidebar = () => {
     const dispatch = useDispatch()
     const { currentData } = useSelector(state => state.user)
     return (
-        <div className='w-[246px] flex-none bg-[#f8f9fa] h-screen border border-orange-400 p-3 flex flex-col gap-3'>
+        <div className='w-[246px] flex-none bg-[#f8f9fa] h-screen p-3 flex flex-col gap-3'>
             <div className='flex flex-col gap-3'>
                 <div className='flex gap-2'>
                     <img
