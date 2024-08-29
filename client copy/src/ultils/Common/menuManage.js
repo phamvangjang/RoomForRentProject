@@ -5,19 +5,19 @@ export const menuManage = [
     {
         id: 1,
         text: 'Post for rent',
-        path: 'system/create-new',
+        path: '/he-thong/tao-moi-bai-dang',
         icon: <TbPencilPlus />
     },
     {
         id: 2,
         text: 'Post manage',
-        path: 'system/manage-post',
+        path: '/he-thong/quan-ly-bai-dang',
         icon: <BiNotepad />
     },
     {
         id: 3,
         text: 'Profile account',
-        path: 'system/profile',
+        path: '/he-thong/thong-tin-tai-khoan',
         icon: <FaRegUserCircle />
     },
 ]

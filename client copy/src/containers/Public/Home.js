@@ -8,7 +8,6 @@ import * as actions from '../../store/actions'
 
 const Home = () => {
     const { isLoggedIn } = useSelector(state => state.auth)
-    const { currentData } = useSelector(state => state.user)
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(actions.getPrices())

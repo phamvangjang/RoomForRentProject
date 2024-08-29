@@ -3,9 +3,10 @@ import { NavLink } from 'react-router-dom'
 import { formatSlug } from '../../ultils/constant'
 import { useDispatch, useSelector } from 'react-redux'
 import * as actions from '../../store/actions'
+import clsx from 'clsx'
 
 
-const Navigation = () => {
+const Navigation = ({ isSystem }) => {
     const { categories } = useSelector(state => state.app)
     const dispatch = useDispatch()
     // const [categories, setCategories] = useState([])
@@ -16,7 +17,7 @@ const Navigation = () => {
     const noActive = 'hover:bg-secondary2 px-4 h-full items-center flex '
     const active = 'hover:bg-secondary2 px-4 h-full items-center flex  bg-secondary2'
     return (
-        <div className='w-full bg-secondary1 text-white flex items-center h-10'>
+        <div className={clsx('w-full bg-secondary1 text-white flex items-center h-10', isSystem && '!bg-[#055699]')}>
             <div className='container mx-auto flex items-center text-sm font-medium h-full'>
                 <NavLink
                     className={({ isActive }) => isActive ? active : noActive}
@@ -28,7 +29,8 @@ const Navigation = () => {
                             key={item.code}>
                             <NavLink
                                 className={({ isActive }) => isActive ? active : noActive}
-                                to={`/${formatSlug(item.value)}`}>{item.value}</NavLink>
+                                to={`/${formatSlug(item.value)}`}>{item.value}
+                            </NavLink>
                         </div>
                     )
                 })}

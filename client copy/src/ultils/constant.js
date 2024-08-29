@@ -7,6 +7,9 @@ export const path = {
     CHO_THUE_PHONG_TRO: 'cho-thue-phong-tro',
     SEARCH: 'tim-kiem',
     DETAIL_POST__TITLE__POSTID: 'chi-tiet/:title/:postId',
+
+    SYSTEM: '/he-thong/*',
+    CREATE_POST: 'tao-moi-bai-dang'
 }
 
 export const formatSlug = (keyword) => {
