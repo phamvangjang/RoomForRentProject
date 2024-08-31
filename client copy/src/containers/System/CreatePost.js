@@ -1,5 +1,5 @@
 import React from 'react'
-import { Address, Overview } from '../../components'
+import { Address, ChooseImages, Overview } from '../../components'
 
 const CreatePost = () => {
     return (
@@ -9,6 +9,7 @@ const CreatePost = () => {
                 <div className='flex flex-col gap-5 border-orange-400 border flex-auto h-full'>
                     <Address />
                     <Overview />
+                    <ChooseImages/>
                 </div>
                 <div className='w-[30%] flex-none'>map</div>
             </div>
