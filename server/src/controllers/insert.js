@@ -1,5 +1,5 @@
-const  createPricesAndAreas  = require('../services/insert')
-const  insertService  = require('../services/insert')
+const createPricesAndAreas = require('../services/insert')
+const insertService = require('../services/insert')
 
 const insert = async (req, res) => {
     try {
