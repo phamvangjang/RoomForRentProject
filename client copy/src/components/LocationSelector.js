@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import axios from 'axios'
 
-const LocationSelector = () => {
+const LocationSelector = ({ setPayload }) => {
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
@@ -54,6 +54,13 @@ const LocationSelector = () => {
     const handleWardChange = (e) => {
         setSelectedWard(e.target.value)
     }
+    useEffect(() => {
+        setPayload(prev => ({
+            ...prev,
+            address: `${selectedWard ? `${wards?.find(item => item.Id === selectedWard)?.Name},` : ''} ${selectedDistrict ? `${districts?.find(item => item.Id === selectedDistrict)?.Name},` : ''} ${selectedCity ? `${cities?.find(item => item.Id === selectedCity)?.Name}` : ''}`,
+            province: `${selectedCity ? `${cities?.find(item => item.Id === selectedCity)?.Name}` : ''}`
+        }))
+    }, [selectedWard, selectedDistrict, selectedCity])
     return (
         <div className='flex flex-col gap-3'>
             <div className='flex gap-4 items-center'>
@@ -114,4 +121,4 @@ const LocationSelector = () => {
     )
 }
 
-export default LocationSelector
+export default memo(LocationSelector)

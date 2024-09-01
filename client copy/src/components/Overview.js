@@ -2,71 +2,90 @@ import React from 'react'
 import Select from './Select'
 import InputFormV2 from './InputFormV2'
 import { useSelector } from 'react-redux'
+import InputReadOnly from './InputReadOnly'
 
 const targets = [
     {
-        id: 'all',
+        code: 'all',
         value: 'Tất cả'
     },
     {
-        id: 'male',
+        code: 'Nam',
         value: 'Nam'
     },
     {
-        id: 'female',
+        code: 'Nữ',
         value: 'Nữ'
     },
 ]
-const Overview = () => {
+const Overview = ({ payload, setPayload }) => {
     const { currentData } = useSelector(state => state.user)
     const { categories } = useSelector(state => state.app)
-    console.log(categories)
+    // console.log(categories)
     return (
         <div className='flex flex-col gap-5'>
             <h2 className='text-2xl font-semibold pb-4'>Overview description</h2>
             <div className='flex flex-col gap-4'>
                 <div className='w-[50%]'>
                     <Select
+                        name='categoryCode'
+                        setValue={setPayload}
+                        value={payload.categoryCode}
                         options={categories}
                         label={'Loại chuyên mục'}
                     />
                 </div>
                 <div>
                     <InputFormV2
+                        value={payload.title}
+                        setValue={setPayload}
                         label={'Tiêu đề'}
+                        name='title'
                     />
                 </div>
                 <div>
                     <label
-                        htmlFor='text-desc'
-                        className='text-sm font-medium'
-                    >
+                        htmlFor='desc'
+                        className='text-sm font-medium'>
                         Nội dung mô tả
                     </label>
-                    <textarea className='w-full min-h-[220px] border rounded-md p-2'>
-
+                    <textarea
+                        id='desc'
+                        cols='30'
+                        rows='10'
+                        className='w-full border rounded-md p-2'
+                        value={payload.description}
+                        onChange={(e) => setPayload(prev => ({ ...prev, description: e.target.value }))}>
                     </textarea>
                 </div>
                 <div className='flex flex-col gap-4 w-[50%]'>
-                    <InputFormV2
-                        info
+                    <InputReadOnly
                         label={'Thông tin liên hệ'}
                         value={currentData?.name}
                     />
-                    <InputFormV2
-                        info
+                    <InputReadOnly
                         label={'Điện thoại'}
                         value={currentData?.phone}
                     />
                     <InputFormV2
+                        value={payload.priceNumber}
+                        setValue={setPayload}
+                        name='priceNumber'
+                        small='Nhập đầy đủ số, ví dụ 1 triệu thì nhập là 1000000'
                         unit={'Đồng'}
                         label={'Giá cho thuê'}
                     />
                     <InputFormV2
+                        value={payload.areaNumber}
+                        setValue={setPayload}
+                        name='areaNumber'
                         unit={'m2'}
                         label={'Diện tích'}
                     />
                     <Select
+                        value={payload.target}
+                        setValue={setPayload}
+                        name='target'
                         options={targets}
                         label={'Đối tượng cho thuê'}
                     />

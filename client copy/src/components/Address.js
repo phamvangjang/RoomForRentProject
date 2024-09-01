@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import Select from './Select'
 import LocationSelector from './LocationSelector'
 
-const Address = () => {
+const Address = ({payload,setPayload}) => {
     return (
         <div className='flex flex-col gap-5'>
             <h2 className='text-2xl font-semibold pb-4'>Address for rent</h2>
             <div className='flex gap-2'>
                 <div className='flex-1'>
-                    <LocationSelector />
+                    <LocationSelector payload={payload} setPayload={setPayload}/>
                 </div>
             </div>
 
