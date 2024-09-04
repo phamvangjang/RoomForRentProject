@@ -11,7 +11,6 @@ const Address = ({payload,setPayload}) => {
                     <LocationSelector payload={payload} setPayload={setPayload}/>
                 </div>
             </div>
-
         </div>
     )
 }

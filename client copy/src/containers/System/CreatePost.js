@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Address, Button, ChooseImages, Overview } from '../../components'
 import { useSelector } from 'react-redux'
+import { getCodes, getCodesAreas } from '../../ultils/Common/getCodes'
 
 const CreatePost = () => {
     const { prices, areas } = useSelector(state => state.app)
@@ -9,7 +10,7 @@ const CreatePost = () => {
         title: '',
         priceNumber: 0,
         areaNumber: 0,
-        image: '',
+        images: '',
         address: '',
         priceCode: '',
         areaCode: '',
@@ -18,9 +19,18 @@ const CreatePost = () => {
         province: ''
     })
     const handleSubmit = () => {
-        console.log(payload)
+        let priceCodeArr = getCodes(+payload.priceNumber, prices, 1, 15)
+        let priceCode = priceCodeArr[0]?.code
+        let areaCodeArr = getCodesAreas(+payload.areaNumber, areas, 0, 90)
+        let areaCode = areaCodeArr[0]?.code
+        let finalPayload = {
+            ...payload,
+            priceCode,
+            areaCode
+        }
+        console.log(finalPayload)
     }
-    console.log({prices,areas})
+    // console.log({prices,areas})
     return (
         <div className='p-10 h-full'>
             <h1 className='text-4xl border-b-[1px] border-[#dee2e6] pb-8 font-semibold'>New post</h1>
