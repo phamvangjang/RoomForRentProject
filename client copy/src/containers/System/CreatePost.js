@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux'
 import { getCodes, getCodesAreas } from '../../ultils/Common/getCodes'
 
 const CreatePost = () => {
-    const { prices, areas } = useSelector(state => state.app)
+    const { currentData } = useSelector(state => state.user)
+    const { prices, areas, categories, provinces } = useSelector(state => state.app)
     const [payload, setPayload] = useState({
         categoryCode: '',
         title: '',
@@ -19,18 +20,21 @@ const CreatePost = () => {
         province: ''
     })
     const handleSubmit = () => {
-        let priceCodeArr = getCodes(+payload.priceNumber, prices, 1, 15)
+        let priceCodeArr = getCodes(+payload.priceNumber / Math.pow(10, 6), prices, 1, 15)
         let priceCode = priceCodeArr[0]?.code
         let areaCodeArr = getCodesAreas(+payload.areaNumber, areas, 0, 90)
         let areaCode = areaCodeArr[0]?.code
         let finalPayload = {
             ...payload,
             priceCode,
-            areaCode
+            areaCode,
+            priceNumber: +payload.priceNumber / Math.pow(10, 6),
+            userId: currentData?.id,
+            label: `${categories?.find(item => item.code === payload?.categoryCode)?.value}${payload?.address?.split(',')[1]}`
         }
         console.log(finalPayload)
     }
-    // console.log({prices,areas})
+    console.log(categories)
     return (
         <div className='p-10 h-full'>
             <h1 className='text-4xl border-b-[1px] border-[#dee2e6] pb-8 font-semibold'>New post</h1>

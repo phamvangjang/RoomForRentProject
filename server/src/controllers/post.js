@@ -43,9 +43,22 @@ const getNewPosts = asyncHandler(async (req, res) => {
         })
     }
 })
+const createNewPost = asyncHandler(async (req, res) => {
+    try {
+        const { id } = req.user
+        const response = await postService.createNewPostService(req.body,id)
+        return res.status(200).json(response)
+    } catch (error) {
+        return res.json({
+            success: false,
+            msg: 'Create  new post was failed'
+        })
+    }
+})
 
 module.exports = {
     getPosts,
     getPostsLimit,
-    getNewPosts
+    getNewPosts,
+    createNewPost
 }
