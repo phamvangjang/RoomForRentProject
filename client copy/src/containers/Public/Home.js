@@ -8,13 +8,6 @@ import * as actions from '../../store/actions'
 
 const Home = () => {
     const { isLoggedIn } = useSelector(state => state.auth)
-    const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(actions.getPrices())
-        dispatch(actions.getAreas())
-        dispatch(actions.getProvinces())
-    }, [])
-
     return (
         <div className=' w-full h-full'>
             <Header />

@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import { Address, ChooseImages, Overview } from '../../components'
+import { Address, Button, ChooseImages, Overview } from '../../components'
+import { useSelector } from 'react-redux'
 
 const CreatePost = () => {
+    const { prices, areas } = useSelector(state => state.app)
     const [payload, setPayload] = useState({
         categoryCode: '',
         title: '',
@@ -15,7 +17,10 @@ const CreatePost = () => {
         target: '',
         province: ''
     })
-    console.log(payload)
+    const handleSubmit = () => {
+        console.log(payload)
+    }
+    console.log({prices,areas})
     return (
         <div className='p-10 h-full'>
             <h1 className='text-4xl border-b-[1px] border-[#dee2e6] pb-8 font-semibold'>New post</h1>
@@ -24,8 +29,16 @@ const CreatePost = () => {
                     <Address payload={payload} setPayload={setPayload} />
                     <Overview payload={payload} setPayload={setPayload} />
                     <ChooseImages payload={payload} setPayload={setPayload} />
+                    <Button
+                        text={'Create new'}
+                        bgColor={'bg-green-600'}
+                        onClick={handleSubmit}
+                        textColor={'text-white'} />
+                    <div className='h-[500px]'></div>
                 </div>
-                <div className='w-[30%] flex-none'>map</div>
+                <div className='w-[30%] flex-none'>
+                    map
+                </div>
             </div>
         </div>
     )

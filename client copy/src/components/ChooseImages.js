@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import { MdPhotoCamera } from "react-icons/md";
 import { apiUploadImages } from '../services';
+import { RiDeleteBinFill } from "react-icons/ri";
+import Loading from './Loading';
 
-const ChooseImages = ({ setPayload }) => {
+const ChooseImages = ({ payload, setPayload }) => {
+    const [isLoading, setIsLoading] = useState(false)
     const [imagesPreview, setImagesPreview] = useState([])
     const handleFiles = async (e) => {
         e.stopPropagation()
+        setIsLoading(true)
         let images = []
         let files = e.target.files
         let formData = new FormData()
@@ -17,8 +21,21 @@ const ChooseImages = ({ setPayload }) => {
                 images = [...images, response?.data?.secure_url]
             }
         }
-        setImagesPreview(images)
-        setPayload(prev => ({ ...prev, images: JSON.stringify(images) }))
+        setIsLoading(false)
+        setImagesPreview(prev => [...prev, ...images]);
+        setPayload(prev => ({
+            ...prev,
+            images: [...(prev.images || []), ...images]
+        }));
+        // setImagesPreview(images)
+        // setPayload(prev => ({ ...prev, images: JSON.stringify(images) }))
+    }
+    const handleDeleteImage = (image) => {
+        setImagesPreview(prev => prev?.filter(item => item !== image))
+        setPayload(prev => ({
+            ...prev,
+            images: prev.images?.filter(item => item !== image)
+        }))
     }
     return (
         <div className='flex flex-col gap-5 w-full'>
@@ -30,8 +47,13 @@ const ChooseImages = ({ setPayload }) => {
                 <label
                     className='w-full cursor-pointer border-2 border-dashed h-[200px] my-2 flex flex-col gap-2 justify-center items-center rounded-md'
                     htmlFor='file'>
-                    <MdPhotoCamera size={48} />
-                    <span>Thêm ảnh</span>
+                    {isLoading
+                        ? <Loading />
+                        : <div
+                            className='flex flex-col gap-2 justify-center items-center'>
+                            <MdPhotoCamera size={48} />
+                            <span>Thêm ảnh</span>
+                        </div>}
                 </label>
                 <input
                     onChange={handleFiles}
@@ -40,17 +62,22 @@ const ChooseImages = ({ setPayload }) => {
                     type='file'
                     id='file' />
             </div>
-            <div className='flex gap-2 w-full'>
+            <div className='flex gap-3 w-full h-full'>
                 {imagesPreview?.map(item => {
                     return (
-                        <div 
-                        key={item}
-                        className='flex flex-col gap-2 justify-center items-center rounded-md shadow-md border w-44 h-44'>
+                        <div
+                            key={item}
+                            className='w-[30%] h-full relative'>
                             <img
                                 alt='preview'
                                 src={item}
-                                className='w-32 h-32 object-cover' />
-                            <span>Xóa</span>
+                                className='w-full h-full object-cover rounded-md shadow-md' />
+                            <div
+                                onClick={() => handleDeleteImage(item)}
+                                title='Xóa'
+                                className='absolute top-1 right-1 bg-gray-200 rounded-full p-2 hover:bg-gray-400 cursor-pointer'>
+                                <RiDeleteBinFill />
+                            </div>
                         </div>
                     )
                 })}
