@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Select from './Select'
 import InputFormV2 from './InputFormV2'
 import { useSelector } from 'react-redux'
@@ -21,7 +21,12 @@ const targets = [
 const Overview = ({ payload, setPayload }) => {
     const { currentData } = useSelector(state => state.user)
     const { categories } = useSelector(state => state.app)
-    // console.log(categories)
+    const [typeOverview, setTypeOverview] = useState('')
+    useEffect(() => {
+        setTypeOverview(categories?.find(index => index.code === payload?.categoryCode)?.value)
+    }, [typeOverview])
+    // setPayload(prev => ({ ...prev, typeOverview }))
+    // console.log(typeOverview)
     return (
         <div className='flex flex-col gap-5'>
             <h2 className='text-2xl font-semibold pb-4'>Overview description</h2>
@@ -68,7 +73,7 @@ const Overview = ({ payload, setPayload }) => {
                         value={currentData?.phone}
                     />
                     <InputFormV2
-                        value={payload.priceNumber}
+                        value={+payload.priceNumber}
                         setValue={setPayload}
                         name='priceNumber'
                         small='Nhập đầy đủ số, ví dụ 1 triệu thì nhập là 1000000'
@@ -76,7 +81,7 @@ const Overview = ({ payload, setPayload }) => {
                         label={'Giá cho thuê'}
                     />
                     <InputFormV2
-                        value={payload.areaNumber}
+                        value={+payload.areaNumber}
                         setValue={setPayload}
                         name='areaNumber'
                         unit={'m2'}

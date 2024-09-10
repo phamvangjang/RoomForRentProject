@@ -6,7 +6,7 @@ const Sitem = ({ title, price, image, createAt }) => {
     return (
         <div className='flex items-center justify-between border-b-2 border-[#eee] py-3'>
             <img
-                src={image[0]}
+                src={image[0] || ''}
                 alt='thumnail'
                 className='w-[65px] h-[65px] object-cover rounded-md flex-none'
             />

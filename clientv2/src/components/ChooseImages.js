@@ -27,8 +27,6 @@ const ChooseImages = ({ payload, setPayload }) => {
             ...prev,
             images: [...(prev.images || []), ...images]
         }));
-        // setImagesPreview(images)
-        // setPayload(prev => ({ ...prev, images: JSON.stringify(images) }))
     }
     const handleDeleteImage = (image) => {
         setImagesPreview(prev => prev?.filter(item => item !== image))

@@ -35,6 +35,18 @@ export const apiGetNewPosts = () => new Promise(async (resolve, reject) => {
         reject(error)
     }
 })
+export const apiCreateNewPost = (payload) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'post',
+            url: `post/createPost`,
+            data: payload
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+})
 export const apiUploadImages = (images) => new Promise(async (resolve, reject) => {
     try {
         const response = await axios({

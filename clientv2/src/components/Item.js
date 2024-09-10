@@ -18,7 +18,7 @@ const Item = ({ images, user, title, description, star, attributes, address, id 
                 <Link
                     to={`chi-tiet/${title}/${id}`}
                     className='w-[40%] flex flex-wrap items-center justify-center relative cursor-pointer gap-[2px]'>
-                    {images.length > 0 && images.filter((i, index) => indexs.some(i => i === index))?.map((i, index) => {
+                    {images?.length > 0 && images.filter((i, index) => indexs.some(i => i === index))?.map((i, index) => {
                         return (
                             <img
                                 key={index}

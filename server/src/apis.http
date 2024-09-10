@@ -13,7 +13,7 @@ POST http://localhost:5000/api/auth/signIn
 Content-Type: application/json
 
 {
-    "phone" : "0976320547",
+    "phone" : "0896119779",
     "password": "123456"
 }
 

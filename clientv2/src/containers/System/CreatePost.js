@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Address, Button, ChooseImages, Overview } from '../../components'
 import { useSelector } from 'react-redux'
 import { getCodes, getCodesAreas } from '../../ultils/Common/getCodes'
+import { apiCreateNewPost } from '../../services'
+import Swal from 'sweetalert2'
 
 const CreatePost = () => {
     const { currentData } = useSelector(state => state.user)
@@ -19,27 +21,48 @@ const CreatePost = () => {
         target: '',
         province: ''
     })
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         let priceCodeArr = getCodes(+payload.priceNumber / Math.pow(10, 6), prices, 1, 15)
         let priceCode = priceCodeArr[0]?.code
-        let areaCodeArr = getCodesAreas(+payload.areaNumber, areas, 0, 90)
+        let areaCodeArr = getCodesAreas(+payload.areaNumber, areas, 20, 90)
         let areaCode = areaCodeArr[0]?.code
         let finalPayload = {
             ...payload,
             priceCode,
             areaCode,
+            areaNumber: +payload.areaNumber,
             priceNumber: +payload.priceNumber / Math.pow(10, 6),
             userId: currentData?.id,
-            label: `${categories?.find(item => item.code === payload?.categoryCode)?.value}${payload?.address?.split(',')[1]}`
+            label: `${categories?.find(item => item.code === payload?.categoryCode)?.value}${payload?.address?.split(',')[1]}`,
+            area: `${categories?.find(item => item.code === payload?.categoryCode)?.value}${payload?.address?.split(',')[2]}`,
         }
-        console.log(finalPayload)
+        // console.log(finalPayload)
+        const response = await apiCreateNewPost(finalPayload)
+        if (response?.data?.success) {
+            Swal.fire('Successfully', 'Created new post', 'success').then(() => {
+                setPayload({
+                    categoryCode: '',
+                    title: '',
+                    priceNumber: 0,
+                    areaNumber: 0,
+                    images: '',
+                    address: '',
+                    priceCode: '',
+                    areaCode: '',
+                    description: '',
+                    target: '',
+                    province: ''
+                })
+            })
+        } else {
+            Swal.fire('Oops!', 'Somethings was wrong', 'error')
+        }
     }
-    console.log(categories)
     return (
         <div className='p-10 h-full'>
             <h1 className='text-4xl border-b-[1px] border-[#dee2e6] pb-8 font-semibold'>New post</h1>
             <div className='flex gap-8 w-full h-full'>
-                <div className='flex flex-col gap-5 border-orange-400 border flex-auto h-full'>
+                <div className='flex flex-col gap-5 flex-auto h-full'>
                     <Address payload={payload} setPayload={setPayload} />
                     <Overview payload={payload} setPayload={setPayload} />
                     <ChooseImages payload={payload} setPayload={setPayload} />

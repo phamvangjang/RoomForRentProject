@@ -17,7 +17,7 @@ const RelatedPost = () => {
                 {newPosts?.map(item => {
                     return (
                         <Sitem
-                            image={JSON.parse(item?.images.image)}
+                            image={JSON.parse(item?.images?.image)||''}
                             key={item?.id}
                             title={item?.title}
                             price={item?.attributes?.price}
