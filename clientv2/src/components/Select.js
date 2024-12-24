@@ -1,6 +1,11 @@
 import React, { memo } from 'react'
 
-const Select = ({ label, options, value, setValue, name }) => {
+const Select = ({ label, options, value, setValue, name, invalidFields }) => {
+    const handleErrorText = () => {
+        let nameInvalid = invalidFields?.find(item => item.name === name)
+        let addressInvalid = invalidFields?.find(item => item.name === 'address')
+        return `${nameInvalid ? nameInvalid.message : ''}` || `${addressInvalid ? addressInvalid.message : ''}`
+    }
     return (
         <div className='text-sm flex flex-col gap-1'>
             <label
@@ -27,6 +32,10 @@ const Select = ({ label, options, value, setValue, name }) => {
                     )
                 })}
             </select>
+            <small
+                className='text-red-600'>
+                {handleErrorText()}
+            </small>
         </div>
     )
 }

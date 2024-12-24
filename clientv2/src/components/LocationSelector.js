@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react'
 import axios from 'axios'
 
-const LocationSelector = ({ setPayload }) => {
+const LocationSelector = ({ setPayload, invalidFields, setInvalidFields }) => {
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
@@ -35,7 +35,6 @@ const LocationSelector = ({ setPayload }) => {
             setDistricts(selectedCityData?.Districts);
         }
     };
-
     const handleDistrictChange = (e) => {
         const districtId = e.target.value;
         setSelectedDistrict(districtId);
@@ -57,7 +56,7 @@ const LocationSelector = ({ setPayload }) => {
     useEffect(() => {
         setPayload(prev => ({
             ...prev,
-            address: `${selectedWard ? `${wards?.find(item => item.Id === selectedWard)?.Name},` : ''} ${selectedDistrict ? `${districts?.find(item => item.Id === selectedDistrict)?.Name},` : ''} ${selectedCity ? `${cities?.find(item => item.Id === selectedCity)?.Name}` : ''}`,
+            address: `${selectedWard ? `${wards?.find(item => item.Id === selectedWard)?.Name}, ` : ''}${selectedDistrict ? `${districts?.find(item => item.Id === selectedDistrict)?.Name}, ` : ''}${selectedCity ? `${cities?.find(item => item.Id === selectedCity)?.Name}` : ''}`,
             province: `${selectedCity ? `${cities?.find(item => item.Id === selectedCity)?.Name}` : ''}`
         }))
     }, [selectedWard, selectedDistrict, selectedCity])
@@ -65,6 +64,8 @@ const LocationSelector = ({ setPayload }) => {
         <div className='flex flex-col gap-3'>
             <div className='flex gap-4 items-center'>
                 <select
+                    invalidFields={invalidFields}
+                    setInvalidFields={setInvalidFields}
                     className="form-select form-select-sm border py-2 rounded-md"
                     value={selectedCity}
                     onChange={handleCityChange}>
@@ -77,6 +78,8 @@ const LocationSelector = ({ setPayload }) => {
                 </select>
 
                 <select
+                    invalidFields={invalidFields}
+                    setInvalidFields={setInvalidFields}
                     className="form-select form-select-sm border py-2 rounded-md"
                     value={selectedDistrict}
                     onChange={handleDistrictChange}
@@ -90,6 +93,8 @@ const LocationSelector = ({ setPayload }) => {
                 </select>
 
                 <select
+                    invalidFields={invalidFields}
+                    setInvalidFields={setInvalidFields}
                     className="form-select form-select-sm border py-2 rounded-md"
                     value={selectedWard}
                     onChange={handleWardChange}

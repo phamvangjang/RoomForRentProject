@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import * as actions from '../../store/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
+import validate from '../../ultils/Common/validateFields'
 
 const Login = () => {
     const navigate = useNavigate()
@@ -36,48 +37,11 @@ const Login = () => {
             phone: payload.phone,
             password: payload.password
         }
-        let invalids = validate(finalPayload)
+        let invalids = validate(finalPayload, setInvalidFields)
         if (invalids === 0) isRegister ? dispatch(actions.register(payload)) : dispatch(actions.SignIn(payload))
     }
 
-    const validate = (payload) => {
-        let invalids = 0
-        let fields = Object.entries(payload)
-        fields.forEach(item => {
-            if (item[1] === '') {
-                setInvalidFields(prev => [...prev, {
-                    name: item[0],
-                    message: 'This field must not is empty'
-                }])
-                invalids++
-            }
-        })
-        fields.forEach(item => {
-            switch (item[0]) {
-                case 'password':
-                    if (item[1].length < 6) {
-                        setInvalidFields(prev => [...prev, {
-                            name: item[0],
-                            message: 'Password must be at least 6 characters'
-                        }])
-                        invalids++
-                    }
-                    break;
-                case 'phone':
-                    if (!+item[1]) {
-                        setInvalidFields(prev => [...prev, {
-                            name: item[0],
-                            message: 'Your phone number is invalid'
-                        }])
-                        invalids++
-                    }
-                    break;
-                default:
-                    break;
-            }
-        })
-        return invalids
-    }
+
 
     return (
         <div className='w-full flex items-center justify-center my-4'>
