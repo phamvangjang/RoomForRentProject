@@ -1,4 +1,4 @@
-const validate = (payload,setInvalidFields) => {
+const validate = (payload, setInvalidFields) => {
     let invalids = 0
     let fields = Object.entries(payload)
     fields.forEach(item => {
@@ -6,8 +6,8 @@ const validate = (payload,setInvalidFields) => {
             setInvalidFields(prev => [...prev, {
                 name: item[0],
                 message: 'This field must not is empty'
-            }])
-            invalids++
+            }]);
+            invalids++;
         }
     })
     fields.forEach(item => {

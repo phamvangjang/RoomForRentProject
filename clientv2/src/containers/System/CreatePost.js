@@ -39,9 +39,9 @@ const CreatePost = () => {
             area: `${categories?.find(item => item.code === payload?.categoryCode)?.value}${payload?.address?.split(',')[2]}`,
         }
 
-        console.log(payload)
-        const result = validate(payload, invalidFields)
-        console.log(invalidFields)
+        // console.log(payload)
+        const result = validate(finalPayload, setInvalidFields)
+        // console.log(invalidFields)
         // const response = await apiCreateNewPost(finalPayload)
         // if (response?.data?.success) {
         //     Swal.fire('Successfully', 'Created new post', 'success').then(() => {
@@ -86,9 +86,8 @@ const CreatePost = () => {
                         bgColor={'bg-green-600'}
                         onClick={handleSubmit}
                         textColor={'text-white'} />
-                    <div className='h-[500px]'></div>
                 </div>
-                <div className='w-[30%] flex-none'>
+                <div className='w-[30%] flex-none h-full'>
                     map
                 </div>
             </div>
