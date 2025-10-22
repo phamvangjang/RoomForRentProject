@@ -1,6 +1,7 @@
 const db = require('../models')
 const bcrypt = require('bcrypt')
 const { v4 } = require('uuid')
+const { convertVietnameseDateToJSDate } = require('../ultils/common')
 require('dotenv').config()
 const chothuephongtro = require('../../data/chothuephongtro.json')
 const chothuecanho = require('../../data/chothuecanho.json')
@@ -90,8 +91,8 @@ const insertService = () => new Promise(async (resolve, reject) => {
                     type: item?.overview?.content.find(i => i.name === "Loại tin rao:")?.content,
                     target: item?.overview?.content.find(i => i.name === "Đối tượng thuê:")?.content,
                     bonus: item?.overview?.content.find(i => i.name === "Gói tin:")?.content,
-                    created: item?.overview?.content.find(i => i.name === "Ngày đăng:")?.content,
-                    expire: item?.overview?.content.find(i => i.name === "Ngày hết hạn:")?.content,
+                    created: convertVietnameseDateToJSDate(item?.overview?.content.find(i => i.name === "Ngày đăng:")?.content),
+                    expire: convertVietnameseDateToJSDate(item?.overview?.content.find(i => i.name === "Ngày hết hạn:")?.content),
                 })
                 await db.User.create({
                     id: userId,

@@ -13,22 +13,22 @@ const InputFormV2 = ({
     invalidFields,
     setInvalidFields }) => {
     return (
-        <div className='text-sm flex flex-col gap-1 '>
+        <div className='text-sm flex flex-col gap-1 w-full'>
             <label htmlFor={text} className='font-medium'>{label}</label>
-            <div className={clsx('', unit && 'flex items-center justify-center')}>
+            <div className={clsx('', unit && 'flex items-center justify-center w-full')}>
                 <input
                     type={type || 'text'}
                     id='title'
                     className={clsx('border outline-none p-2 w-full bg-white',
                         unit ? 'flex-auto rounded-l-md' : 'rounded-md')}
                     value={value}
-                    onChange={(e) => setValue(prev => ({ ...prev, [name]: e.target.value }))}
                     onFocus={() => setInvalidFields([])}
+                    onChange={(e) => setValue(prev => ({ ...prev, [name]: e.target.value }))}
                 />
                 {unit && <span className={clsx('w-16 bg-[#e9ecef] flex items-center justify-center h-full', unit && 'rounded-r-md')}>{unit}</span>}
             </div>
-            {small && <small className='text-[#6c757d] text-xs'>{small}</small>}
-            <small className='text-red-600 italic cursor-pointer'>
+            {small && <small className='text-[#6c757d] text-xs whitespace-nowrap'>{small}</small>}
+            <small className='text-red-500 italic w-full block'>
                 {invalidFields?.some(item => item.name === name) && invalidFields?.find(item => item.name === name)?.messages}
             </small>
         </div>

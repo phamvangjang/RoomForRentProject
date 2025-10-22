@@ -22,11 +22,13 @@ const Select = ({
             </label>
 
             <select
-                id='select-addreess'
+                id={name}
                 value={value}
                 className='outline-none border border-gray-300 p-2 rounded-md w-full'
                 onChange={(e) => !name ? setValue(e.target.value) : setValue(prev => ({ ...prev, [name]: e.target.value }))}
-                onFocus={() => setInvalidFields([])}>
+                onFocus={() => setInvalidFields([])}
+            // onFocus={() => setInvalidFields((prev) => prev.filter(item => item.name !== name))}
+            >
                 <option>
                     {`--Chọn ${label}--`}
                 </option>
@@ -41,7 +43,7 @@ const Select = ({
                 })}
             </select>
             <small
-                className='text-red-600 italic cursor-pointer'>
+                className='text-red-500 italic'>
                 {handleErrorText()}
             </small>
         </div>

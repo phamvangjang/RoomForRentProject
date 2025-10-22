@@ -17,8 +17,12 @@ Content-Type: application/json
     "password": "123456"
 }
 
-### insert data 
-POST http://localhost:5000/api/insert/
+### insert orther data 
+POST http://localhost:5000/api/insert/orther
+Content-Type: application/json
+
+### insert prices and areas data
+POST http://localhost:5000/api/insert/prices-areas
 Content-Type: application/json
 
 ### get categories 

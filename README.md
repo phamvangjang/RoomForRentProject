@@ -58,7 +58,23 @@ PhongTro123 is a fullstack web platform that streamlines the process of finding 
     cd ../clientv2
     npm start
     ```
-
+7. How to test application in localhost
+    7.1 Go to folder src of server, copy and run
+    ```
+    cd .\server\src
+    ```
+    7.2 create table in database with:
+    ```
+    npx sequelize-cli db:migrate
+    ```
+    7.3 insert data to for your database just create, copy and run script sql below in env run mysql
+    ```
+    INSERT INTO categories (code, value, header, subheader, createdAt,updatedAt) VALUES("CTCH", "Cho thuê căn hộ", "Cho Thuê Căn Hộ Chung Cư, Giá Rẻ, View Đẹp, Mới Nhất 2024", "Cho thuê căn hộ - Kênh đăng tin cho thuê căn hộ số 1: giá rẻ, chính chủ, đầy đủ tiện nghi. Cho thuê chung cư với nhiều mức giá, diện tích cho thuê khác nhau.", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    INSERT INTO categories (code, value, header, subheader, createdAt,updatedAt) VALUES("CTMB", "Cho thuê mặt bằng", "Cho Thuê Mặt  Bằng, Giá Rẻ, Chính Chủ, Mới Nhất 2024", "Cho thuê mặt bằng: giá rẻ, chính chủ, gần chợ, trường học, tiện mở quán ăn, cafe, kinh     doanh mọi ngành nghề. Đăng tin cho thuê mặt bằng hiệu quả tại Phongtro123.com", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    INSERT INTO categories (code, value, header, subheader, createdAt,updatedAt) VALUES("CTPT", "Cho thuê phòng trọ", "Cho Thuê Phòng   Trọ, Giá Rẻ, Tiện Nghi, Mới Nhất 2024", "Cho thuê phòng trọ - Kênh thông tin số 1 về phòng trọ giá rẻ, phòng trọ sinh viên, phòng     trọ cao cấp mới nhất năm 2024. Tất cả nhà trọ cho thuê giá tốt nhất tại Việt Nam.", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    INSERT INTO categories (code, value, header, subheader, createdAt,updatedAt) VALUES("NCT", "Nhà cho thuê", "Cho Thuê Nhà Nguyên     Căn, Giá Rẻ, Chính Chủ, Mới Nhất 2024", "Cho thuê nhà nguyên căn, nhà riêng: giá rẻ, chính chủ, đầy đủ tiện nghi. Tìm thuê nhà với  nhiều mức giá khác nhau, đa dạng loại diện tích. Đăng tin cho thuê nhà nhanh, hiệu quả tại phongtro123.com", CURRENT_TIMESTAMP,  CURRENT_TIMESTAMP);
+    ```
+    7.4 run api 'insert data' at file apis.http, then, run client with port 3000 to getting starting
 ## Project Structure
 ```
 PhongTro123/

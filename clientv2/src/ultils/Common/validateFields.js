@@ -16,24 +16,40 @@ const validate = (payload, setInvalidFields) => {
                 if (item[1].length < 6) {
                     setInvalidFields(prev => [...prev, {
                         name: item[0],
-                        message: 'Password must be at least 6 characters'
+                        message: 'Password must be at least 6 characters.'
                     }])
                     invalids++
                 }
                 break;
+
             case 'phone':
                 if (!+item[1]) {
                     setInvalidFields(prev => [...prev, {
                         name: item[0],
-                        message: 'Your phone number is invalid'
+                        message: 'Your phone number is invalid.'
                     }])
                     invalids++
                 }
                 break;
+
+            case 'priceNumber':
+            case 'areaNumber':
+                {
+                    if (+item[1] === 0) {
+                        setInvalidFields(prev => [...prev, {
+                            name: item[0],
+                            message: 'No value set for this field.'
+                        }])
+                        invalids++
+                    }
+                    break;
+                }
+
             default:
                 break;
         }
     })
+    console.log('invalids', invalids)
     return invalids
 }
 export default validate

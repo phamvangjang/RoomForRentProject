@@ -17,8 +17,8 @@ const CreatePost = () => {
         areaNumber: 0,
         images: '',
         address: '',
-        priceCode: '',
-        areaCode: '',
+        //priceCode: '',
+        //areaCode: '',
         description: '',
         target: '',
         province: ''
@@ -26,6 +26,7 @@ const CreatePost = () => {
     const handleSubmit = async () => {
         let priceCodeArr = getCodes(+payload.priceNumber / Math.pow(10, 6), prices, 1, 15)
         let priceCode = priceCodeArr[0]?.code
+
         let areaCodeArr = getCodesAreas(+payload.areaNumber, areas, 20, 90)
         let areaCode = areaCodeArr[0]?.code
         let finalPayload = {
@@ -39,29 +40,36 @@ const CreatePost = () => {
             area: `${categories?.find(item => item.code === payload?.categoryCode)?.value}${payload?.address?.split(',')[2]}`,
         }
 
-        // console.log(payload)
+        //console.log('finalPayload\n',finalPayload)
+
         const result = validate(finalPayload, setInvalidFields)
-        // console.log(invalidFields)
-        // const response = await apiCreateNewPost(finalPayload)
-        // if (response?.data?.success) {
-        //     Swal.fire('Successfully', 'Created new post', 'success').then(() => {
-        //         setPayload({
-        //             categoryCode: '',
-        //             title: '',
-        //             priceNumber: 0,
-        //             areaNumber: 0,
-        //             images: '',
-        //             address: '',
-        //             priceCode: '',
-        //             areaCode: '',
-        //             description: '',
-        //             target: '',
-        //             province: ''
-        //         })
-        //     })
-        // } else {
-        //     Swal.fire('Oops!', 'Somethings was wrong', 'error')
-        // }
+
+        if (result > 0) {
+            Swal.fire('Oops!', 'Please check the form again', 'error')
+            return;
+        } else {
+            const response = await apiCreateNewPost(finalPayload)
+            console.log('response\n', response)
+            if (response?.data?.success) {
+                Swal.fire('Successfully', response?.data?.msg, response?.data?.success.toString()).then(() => {
+                    setPayload({
+                        categoryCode: '',
+                        title: '',
+                        priceNumber: 0,
+                        areaNumber: 0,
+                        images: '',
+                        address: '',
+                        priceCode: '',
+                        areaCode: '',
+                        description: '',
+                        target: '',
+                        province: ''
+                    })
+                })
+            } else {
+                Swal.fire('Oops!', 'Somethings was wrong', 'error')
+            }
+        }
     }
     return (
         <div className='p-10 h-full'>
@@ -69,20 +77,25 @@ const CreatePost = () => {
             <div className='flex gap-8 w-full h-full'>
                 <div className='flex flex-col gap-5 flex-auto h-full'>
                     <Address
+                        invalidFields={invalidFields}
+                        setInvalidFields={setInvalidFields}
                         payload={payload}
                         setPayload={setPayload}
-                        invalidFields={invalidFields}
-                        setInvalidFields={setInvalidFields} />
+                    />
                     <Overview
+                        invalidFields={invalidFields}
+                        setInvalidFields={setInvalidFields}
                         payload={payload}
                         setPayload={setPayload}
-                        invalidFields={invalidFields}
-                        setInvalidFields={setInvalidFields} />
+                    />
                     <ChooseImages
+                        invalidFields={invalidFields}
+                        setInvalidFields={setInvalidFields}
                         payload={payload}
-                        setPayload={setPayload} />
+                        setPayload={setPayload}
+                    />
                     <Button
-                        text={'Create new'}
+                        text='Create new'
                         bgColor={'bg-green-600'}
                         onClick={handleSubmit}
                         textColor={'text-white'} />

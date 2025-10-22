@@ -33,22 +33,21 @@ const Overview = ({ payload, setPayload, invalidFields, setInvalidFields }) => {
             <div className='flex flex-col gap-4'>
                 <div className='w-[50%]'>
                     <Select
+                        invalidFields={invalidFields}
+                        setInvalidFields={setInvalidFields}
                         name='categoryCode'
                         setValue={setPayload}
                         value={payload.categoryCode}
                         options={categories}
                         label={'Loại chuyên mục'}
-                        invalidFields={invalidFields}
-                        setInvalidFields={setInvalidFields}
                     />
                 </div>
-                <div>
+                <div className='flex flex-col gap-1 w-full'>
                     <InputFormV2
                         value={payload.title}
                         setValue={setPayload}
-                        label={'Tiêu đề'}
+                        label='Tiêu đề'
                         name='title'
-                        text={'title'}
                         invalidFields={invalidFields}
                         setInvalidFields={setInvalidFields}
                     />
@@ -68,7 +67,7 @@ const Overview = ({ payload, setPayload, invalidFields, setInvalidFields }) => {
                         onChange={(e) => setPayload(prev => ({ ...prev, description: e.target.value }))}
                         onFocus={() => setInvalidFields([])}>
                     </textarea>
-                    <small className='text-red-500 italic'>
+                    <small className='text-red-500 italic text-xs'>
                         {invalidFields?.some(item => item.name === 'description') && invalidFields?.find(item => item.name === 'description')?.message}
                     </small>
                 </div>
@@ -88,20 +87,26 @@ const Overview = ({ payload, setPayload, invalidFields, setInvalidFields }) => {
                         small='Nhập đầy đủ số, ví dụ 1 triệu thì nhập là 1000000'
                         unit={'Đồng'}
                         label={'Giá cho thuê'}
+                        onFocus={() => setInvalidFields([])}
                         invalidFields={invalidFields}
                         setInvalidFields={setInvalidFields}
-                        onFocus={() => setInvalidFields([])}
                     />
+                    <small className='text-red-500 italic text-xs'>
+                        {invalidFields?.some(item => item.name === 'priceNumber') && invalidFields?.find(item => item.name === 'priceNumber')?.message}
+                    </small>
                     <InputFormV2
                         value={+payload.areaNumber}
                         setValue={setPayload}
                         name='areaNumber'
                         unit={'m2'}
                         label={'Diện tích'}
+                        onFocus={() => setInvalidFields([])}
                         invalidFields={invalidFields}
                         setInvalidFields={setInvalidFields}
-                        onFocus={() => setInvalidFields([])}
                     />
+                    <small className='text-red-500 italic text-xs'>
+                        {invalidFields?.some(item => item.name === 'areaNumber') && invalidFields?.find(item => item.name === 'areaNumber')?.message}
+                    </small>
                     <Select
                         value={payload.target}
                         setValue={setPayload}

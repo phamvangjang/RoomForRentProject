@@ -4,7 +4,7 @@ import { apiUploadImages } from '../services';
 import { RiDeleteBinFill } from "react-icons/ri";
 import Loading from './Loading';
 
-const ChooseImages = ({ payload, setPayload }) => {
+const ChooseImages = ({ payload, setPayload, invalidFields }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [imagesPreview, setImagesPreview] = useState([])
     const handleFiles = async (e) => {
@@ -41,7 +41,7 @@ const ChooseImages = ({ payload, setPayload }) => {
                 <h2 className='text-2xl font-semibold pb-4'>Hình ảnh</h2>
                 <small className='text-sm'>Cập nhật hình ảnh rõ ràng sẽ cho thuê nhanh hơn</small>
             </div>
-            <div className='w-full'>
+            <div className='w-full flex flex-col items-center justify-start'>
                 <label
                     className='w-full cursor-pointer border-2 border-dashed h-[200px] my-2 flex flex-col gap-2 justify-center items-center rounded-md'
                     htmlFor='file'>
@@ -59,6 +59,9 @@ const ChooseImages = ({ payload, setPayload }) => {
                     className='hidden w-full'
                     type='file'
                     id='file' />
+                <small className='text-red-500 italic w-full block'>
+                    {invalidFields?.some(item => item.name === 'images') && invalidFields?.find(item => item.name === 'images')?.messages}
+                </small>
             </div>
             <div className='flex gap-3 w-full h-full'>
                 {imagesPreview?.map(item => {
