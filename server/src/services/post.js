@@ -3,7 +3,8 @@ const { Op } = require('sequelize')
 const { v4 } = require('uuid')
 const moment = require('moment')
 require('moment/locale/vi');
-const { generateCode } = require('../ultils/generateCode')
+const { generateCode } = require('../ultils/generateCode');
+
 const getPostsLimitService = (page, query, { priceNumber, areaNumber }) => new Promise(async (resolve, reject) => {
     try {
         let offset = (!page || +page <= 1) ? 0 : (+page - 1)
@@ -117,7 +118,7 @@ const createNewPostService = (body, userId) => new Promise(async (resolve, rejec
             target: body.target,
             bonus: 'Tin thường',
             created: currentDate,
-            expire: currentDate.setDate(currentDate.getDate() + 10),
+            expire: moment(currentDate).add(10, 'd').toDate()
         })
         await db.Province.findOrCreate({
             where: {
@@ -143,8 +144,38 @@ const createNewPostService = (body, userId) => new Promise(async (resolve, rejec
         reject(error)
     }
 })
+
+const getPostsLimitAdminService = (page, id, query) => new Promise(async (resolve, reject) => {
+    try {
+        let offset = (!page || +page <= 1) ? 0 : (+page - 1)
+        const queries = { ...query, userId: id }
+        const response = await db.Post.findAndCountAll({
+            where: queries,
+            raw: true,
+            nest: true,
+            order: [['createdAt', 'DESC']],
+            offset: offset * (+process.env.LIMIT),
+            limit: +process.env.LIMIT,
+            include: [
+                { model: db.Image, as: 'images', attributes: ['image'] },
+                { model: db.Attribute, as: 'attributes', attributes: ['price', 'acreage', 'published', 'hashtag'] },
+                { model: db.Overview, as: 'overviews'},
+                { model: db.User, as: 'user', attributes: ['name', 'zalo', 'phone'] }
+            ],
+            //attributes: ['id', 'title', 'star', 'address', 'description']
+        })
+        resolve({
+            success: response ? true : false,
+            msg: response ? 'Get posts successfully' : 'Can not get posts',
+            response
+        })
+    } catch (error) {
+        reject(error)
+    }
+})
 module.exports = {
     getPostsLimitService,
     getNewPostsService,
-    createNewPostService
+    createNewPostService,
+    getPostsLimitAdminService
 }

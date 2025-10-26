@@ -58,9 +58,30 @@ const createNewPost = asyncHandler(async (req, res) => {
     }
 })
 
+const getPostsLimitAdmin = asyncHandler(async (req, res) => {
+    const { page, ...query } = req.query;
+    const {id} = req.user;
+    try {
+        if (!id) {
+            return res.status(401).json({
+                success: false,
+                msg: 'Unauthorized'
+            })
+        }
+        const response = await postService.getPostsLimitAdminService(page, id, query)
+        return res.status(200).json(response)
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            msg: 'Can not get posts limit' + error.message
+        })
+    }
+})
+
 module.exports = {
     getPosts,
     getPostsLimit,
     getNewPosts,
-    createNewPost
+    createNewPost,
+    getPostsLimitAdmin
 }
