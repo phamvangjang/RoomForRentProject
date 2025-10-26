@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { MdPhotoCamera } from "react-icons/md";
 import { apiUploadImages } from '../services';
 import { RiDeleteBinFill } from "react-icons/ri";
 import Loading from './Loading';
+import { useSelector } from 'react-redux';
 
 const ChooseImages = ({ payload, setPayload, invalidFields }) => {
+    const { dataEdit } = useSelector(state => state.post);
     const [isLoading, setIsLoading] = useState(false)
     const [imagesPreview, setImagesPreview] = useState([])
     const handleFiles = async (e) => {
@@ -35,6 +37,13 @@ const ChooseImages = ({ payload, setPayload, invalidFields }) => {
             images: prev.images?.filter(item => item !== image)
         }))
     }
+
+    useEffect(() => {
+        if (dataEdit) {
+            let images = dataEdit ? JSON.parse(dataEdit?.images?.image) : ''
+            setImagesPreview(images)
+        }
+    }, [dataEdit])
     return (
         <div className='flex flex-col gap-5 w-full'>
             <div className='flex flex-col gap-1'>

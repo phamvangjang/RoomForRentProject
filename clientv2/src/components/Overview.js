@@ -19,6 +19,7 @@ const targets = [
     },
 ]
 const Overview = ({ payload, setPayload, invalidFields, setInvalidFields }) => {
+    const { dataEdit } = useSelector(state => state.post);
     const { currentData } = useSelector(state => state.user)
     const { categories } = useSelector(state => state.app)
     const [typeOverview, setTypeOverview] = useState('')
@@ -26,7 +27,7 @@ const Overview = ({ payload, setPayload, invalidFields, setInvalidFields }) => {
         setTypeOverview(categories?.find(index => index.code === payload?.categoryCode)?.value)
     }, [typeOverview])
     // setPayload(prev => ({ ...prev, typeOverview }))
-    // console.log(typeOverview)
+    console.log(payload);
     return (
         <div className='flex flex-col gap-5'>
             <h2 className='text-2xl font-semibold pb-4'>Overview description</h2>
@@ -37,7 +38,7 @@ const Overview = ({ payload, setPayload, invalidFields, setInvalidFields }) => {
                         setInvalidFields={setInvalidFields}
                         name='categoryCode'
                         setValue={setPayload}
-                        value={payload.categoryCode}
+                        value={dataEdit.categoryCode || payload.categoryCode}
                         options={categories}
                         label={'Loại chuyên mục'}
                     />
@@ -108,7 +109,7 @@ const Overview = ({ payload, setPayload, invalidFields, setInvalidFields }) => {
                         {invalidFields?.some(item => item.name === 'areaNumber') && invalidFields?.find(item => item.name === 'areaNumber')?.message}
                     </small>
                     <Select
-                        value={payload.target}
+                        value={dataEdit.overviews.target || payload.target}
                         setValue={setPayload}
                         name='target'
                         options={targets}
