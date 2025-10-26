@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { Address, Button, ChooseImages, Overview } from '../../components'
 import { useSelector } from 'react-redux'
 import { getCodes, getCodesAreas } from '../../ultils/Common/getCodes'
-import { apiCreateNewPost } from '../../services'
+import { apiCreateNewPost, apiUpdatePost } from '../../services'
 import Swal from 'sweetalert2'
 import validate from '../../ultils/Common/validateFields'
+import { use } from 'react'
 
 const CreatePost = ({ isEdit }) => {
     const dataEdit = useSelector(state => state.post.dataEdit);
@@ -13,7 +14,7 @@ const CreatePost = ({ isEdit }) => {
     const { prices, areas, categories, provinces } = useSelector(state => state.app)
     const [payload, setPayload] = useState(() => {
         const initData = {
-            categoryCode: dataEdit?.overviews?.categoryCode || '',
+            categoryCode: dataEdit?.overviews?.type || '',
             title: dataEdit?.title || '',
             priceNumber: dataEdit ? +dataEdit?.priceNumber * Math.pow(10, 6) : 0,
             areaNumber: dataEdit ? +dataEdit?.areaNumber : 0,
@@ -46,32 +47,47 @@ const CreatePost = ({ isEdit }) => {
         }
 
         const result = validate(finalPayload, setInvalidFields)
+        if (dataEdit) {
+            finalPayload.postId = dataEdit.id
+            finalPayload.attributesId = dataEdit.attributesId
+            finalPayload.imagesId = dataEdit.imagesId
+            finalPayload.overviewId = dataEdit.overviewId
+        }
+        console.log(finalPayload);
+        console.log(dataEdit);
 
         if (result !== 0) {
             Swal.fire('Oops!', 'Please check the form again', 'error')
         } else {
-            const response = await apiCreateNewPost(finalPayload)
-            if (response?.data?.success) {
-                Swal.fire('Successfully', response?.data?.msg, 'success').then(() => {
-                    setPayload({
-                        categoryCode: '',
-                        title: '',
-                        priceNumber: 0,
-                        areaNumber: 0,
-                        images: '',
-                        address: '',
-                        priceCode: '',
-                        areaCode: '',
-                        description: '',
-                        target: '',
-                        province: ''
-                    })
-                })
+            if (isEdit && dataEdit) {
+                console.log('Final payload: ', finalPayload);
+                //const response = await apiUpdatePost(finalPayload)
             } else {
-                Swal.fire('Oops!', 'Somethings was wrong', 'error')
+                // const response = await apiCreateNewPost(finalPayload)
+                // if (response?.data?.success) {
+                //     Swal.fire('Successfully', response?.data?.msg, 'success').then(() => {
+                //         setPayload({
+                //             categoryCode: '',
+                //             title: '',
+                //             priceNumber: 0,
+                //             areaNumber: 0,
+                //             images: '',
+                //             address: '',
+                //             priceCode: '',
+                //             areaCode: '',
+                //             description: '',
+                //             target: '',
+                //             province: ''
+                //         })
+                //     })
+                // } else {
+                //     Swal.fire('Oops!', 'Somethings was wrong', 'error')
+                // }
             }
         }
     }
+
+
     return (
         <div className='p-10 h-full'>
             <h1 className='text-4xl border-b-[1px] border-[#dee2e6] pb-8 font-semibold'>
@@ -98,7 +114,7 @@ const CreatePost = ({ isEdit }) => {
                         setPayload={setPayload}
                     />
                     <Button
-                        text='Create new'
+                        text={isEdit ? 'Cập nhật' : 'Tạo bài viết mới'}
                         bgColor={'bg-green-600'}
                         onClick={handleSubmit}
                         textColor={'text-white'} />
