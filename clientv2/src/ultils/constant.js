@@ -9,7 +9,10 @@ export const path = {
     DETAIL_POST__TITLE__POSTID: 'chi-tiet/:title/:postId',
 
     SYSTEM: '/he-thong/*',
-    CREATE_POST: 'tao-moi-bai-dang'
+    CREATE_POST: 'tao-moi-bai-dang',
+    MANAGE_POST: 'quan-ly-bai-dang',
+    EDIT_PROFILE: 'sua-thong-tin-ca-nhan',
+    CONTACTS: 'lien-he',
 }
 
 export const formatSlug = (keyword) => {

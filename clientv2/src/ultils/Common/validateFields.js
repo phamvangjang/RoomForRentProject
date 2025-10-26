@@ -49,7 +49,6 @@ const validate = (payload, setInvalidFields) => {
                 break;
         }
     })
-    console.log('invalids', invalids)
     return invalids
 }
 export default validate

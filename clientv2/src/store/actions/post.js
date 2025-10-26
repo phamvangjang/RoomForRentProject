@@ -1,4 +1,9 @@
-import { apiGetNewPosts, apiGetPosts, apiGetPostsLimit } from '../../services/post'
+import {
+    apiGetNewPosts,
+    apiGetPosts,
+    apiGetPostsLimit,
+    apiGetPostsLimitAdmin
+} from '../../services/post'
 import actionTypes from './actionTypes'
 
 export const getPosts = () => async (dispatch) => {
@@ -69,3 +74,32 @@ export const getNewPosts = () => async (dispatch) => {
         })
     }
 }
+
+export const getPostsLimitAdmin = (query) => async (dispatch) => {
+    try {
+        const response = await apiGetPostsLimitAdmin(query)
+        if (response?.data.success) {
+            dispatch({
+                type: actionTypes.GET_POSTS_LIMIT_ADMIN,
+                posts: response.data.response?.rows,
+                count: response.data.response?.count
+            })
+        } else {
+            dispatch({
+                type: actionTypes.GET_POSTS_LIMIT_ADMIN,
+                msg: response.data.msg,
+                posts: null
+            })
+        }
+    } catch (error) {
+        dispatch({
+            type: actionTypes.GET_POSTS_LIMIT_ADMIN,
+            posts: null
+        })
+    }
+}
+
+export const editData = (dataEdit) => ({
+    type: actionTypes.DATAEDIT,
+    dataEdit
+})

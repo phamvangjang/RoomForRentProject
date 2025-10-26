@@ -25,7 +25,7 @@ const ChooseImages = ({ payload, setPayload, invalidFields }) => {
         setImagesPreview(prev => [...prev, ...images]);
         setPayload(prev => ({
             ...prev,
-            images: [...(prev.images || []), ...images]
+            images: [...(prev.images), ...images]
         }));
     }
     const handleDeleteImage = (image) => {
