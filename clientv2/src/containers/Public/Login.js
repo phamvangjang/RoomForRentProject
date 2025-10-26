@@ -38,7 +38,9 @@ const Login = () => {
             password: payload.password
         }
         let invalids = validate(finalPayload, setInvalidFields)
-        if (invalids === 0) isRegister ? dispatch(actions.register(payload)) : dispatch(actions.SignIn(payload))
+        if (invalids === 0) isRegister
+            ? dispatch(actions.register(payload))
+            : dispatch(actions.SignIn(payload))
     }
 
 

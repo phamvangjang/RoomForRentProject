@@ -59,3 +59,16 @@ export const apiUploadImages = (images) => new Promise(async (resolve, reject) =
         reject(error)
     }
 })
+
+export const apiGetPostsLimitAdmin = (query) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'get',
+            url: `post/limit-admin`,
+            params: query
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+})

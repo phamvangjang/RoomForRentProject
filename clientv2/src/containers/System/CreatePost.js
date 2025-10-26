@@ -6,23 +6,28 @@ import { apiCreateNewPost } from '../../services'
 import Swal from 'sweetalert2'
 import validate from '../../ultils/Common/validateFields'
 
-const CreatePost = () => {
+const CreatePost = ({ isEdit }) => {
+    const dataEdit = useSelector(state => state.post.dataEdit);
     const [invalidFields, setInvalidFields] = useState([])
     const { currentData } = useSelector(state => state.user)
     const { prices, areas, categories, provinces } = useSelector(state => state.app)
-    const [payload, setPayload] = useState({
-        categoryCode: '',
-        title: '',
-        priceNumber: 0,
-        areaNumber: 0,
-        images: '',
-        address: '',
-        //priceCode: '',
-        //areaCode: '',
-        description: '',
-        target: '',
-        province: ''
-    })
+    const [payload, setPayload] = useState(() => {
+        const initData = {
+            categoryCode: dataEdit?.overviews?.categoryCode || '',
+            title: dataEdit?.title || '',
+            priceNumber: dataEdit ? +dataEdit?.priceNumber * Math.pow(10, 6) : 0,
+            areaNumber: dataEdit ? +dataEdit?.areaNumber : 0,
+            images: dataEdit ? JSON.parse(dataEdit?.images?.image) : '',
+            address: dataEdit?.address || '',
+            priceCode: dataEdit?.priceCode || '',
+            areaCode: dataEdit?.areaCode || '',
+            description: dataEdit ? JSON.parse(dataEdit?.description) : '',
+            target: dataEdit?.overviews?.target || '',
+            province: dataEdit?.overviews?.province || ''
+        }
+        return initData
+    });
+
     const handleSubmit = async () => {
         let priceCodeArr = getCodes(+payload.priceNumber / Math.pow(10, 6), prices, 1, 15)
         let priceCode = priceCodeArr[0]?.code
@@ -40,18 +45,14 @@ const CreatePost = () => {
             area: `${categories?.find(item => item.code === payload?.categoryCode)?.value}${payload?.address?.split(',')[2]}`,
         }
 
-        //console.log('finalPayload\n',finalPayload)
-
         const result = validate(finalPayload, setInvalidFields)
 
-        if (result > 0) {
+        if (result !== 0) {
             Swal.fire('Oops!', 'Please check the form again', 'error')
-            return;
         } else {
             const response = await apiCreateNewPost(finalPayload)
-            console.log('response\n', response)
             if (response?.data?.success) {
-                Swal.fire('Successfully', response?.data?.msg, response?.data?.success.toString()).then(() => {
+                Swal.fire('Successfully', response?.data?.msg, 'success').then(() => {
                     setPayload({
                         categoryCode: '',
                         title: '',
@@ -73,7 +74,9 @@ const CreatePost = () => {
     }
     return (
         <div className='p-10 h-full'>
-            <h1 className='text-4xl border-b-[1px] border-[#dee2e6] pb-8 font-semibold'>New post</h1>
+            <h1 className='text-4xl border-b-[1px] border-[#dee2e6] pb-8 font-semibold'>
+                {isEdit ? 'Cập nhật bài viết' : 'Tạo bài viết mới'}
+            </h1>
             <div className='flex gap-8 w-full h-full'>
                 <div className='flex flex-col gap-5 flex-auto h-full'>
                     <Address

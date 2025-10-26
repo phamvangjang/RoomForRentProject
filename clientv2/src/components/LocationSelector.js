@@ -1,14 +1,15 @@
 import React, { memo, useEffect, useState } from 'react'
 import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 const LocationSelector = ({ setPayload, invalidFields, setInvalidFields }) => {
+    const { dataEdit } = useSelector(state => state.post)
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
     const [selectedCity, setSelectedCity] = useState("");
     const [selectedDistrict, setSelectedDistrict] = useState("");
     const [selectedWard, setSelectedWard] = useState("");
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -53,10 +54,45 @@ const LocationSelector = ({ setPayload, invalidFields, setInvalidFields }) => {
     const handleWardChange = (e) => {
         setSelectedWard(e.target.value)
     }
+
+    useEffect(() => {
+        if (dataEdit?.address) {
+            const addressParts = dataEdit.address.split(',').map(part => part.trim());
+            // Assuming address format: "Ward, District, City"
+
+            if (addressParts.length >= 3) {
+                const wardName = addressParts[0];
+                const districtName = addressParts[1];
+                const cityName = addressParts[2];
+
+                const cityData = cities.find(city => city.Name === cityName);
+                if (cityData) {
+                    setSelectedCity(cityData.Id);
+                    setDistricts(cityData.Districts);
+
+                    const districtData = cityData.Districts.find(district => district.Name === districtName);
+                    if (districtData) {
+                        setSelectedDistrict(districtData.Id);
+                        setWards(districtData.Wards);
+
+                        const wardData = districtData.Wards.find(ward => ward.Name === wardName);
+                        if (wardData) {
+                            setSelectedWard(wardData.Id);
+                        }
+                    }
+                }
+            }
+        }else {
+            setSelectedCity('');
+            setSelectedDistrict('');
+            setSelectedWard('');
+        }
+    }, [dataEdit, cities]);
+
     useEffect(() => {
         setPayload(prev => ({
             ...prev,
-            address: `${selectedWard ? `${wards?.find(item => item.Id === selectedWard)?.Name}, ` : ''}${selectedDistrict ? `${districts?.find(item => item.Id === selectedDistrict)?.Name}, ` : ''}${selectedCity ? `${cities?.find(item => item.Id === selectedCity)?.Name}` : ''}`,
+            address: `${selectedWard ? `${wards?.find(item => item.Id === selectedWard)?.Name}, ` : ''}${selectedDistrict ? `${districts?.find(item => item.Id === selectedDistrict)?.Name}, ` : ''}${selectedCity ? `${cities?.find(item => item.Id === selectedCity)?.Name}` : ''}` || dataEdit?.address,
             province: `${selectedCity ? `${cities?.find(item => item.Id === selectedCity)?.Name}` : ''}`
         }))
     }, [selectedWard, selectedDistrict, selectedCity])
