@@ -10,5 +10,6 @@ router.get('/', ctrls.getPosts)
 router.use(verifyToken)
 router.post('/createPost', ctrls.createNewPost)
 router.get('/limit-admin', ctrls.getPostsLimitAdmin)
+router.put('/update-post', ctrls.updatePost)
 
 module.exports = router

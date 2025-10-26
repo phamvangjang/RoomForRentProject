@@ -159,7 +159,7 @@ const getPostsLimitAdminService = (page, id, query) => new Promise(async (resolv
             include: [
                 { model: db.Image, as: 'images', attributes: ['image'] },
                 { model: db.Attribute, as: 'attributes', attributes: ['price', 'acreage', 'published', 'hashtag'] },
-                { model: db.Overview, as: 'overviews'},
+                { model: db.Overview, as: 'overviews' },
                 { model: db.User, as: 'user', attributes: ['name', 'zalo', 'phone'] }
             ],
             //attributes: ['id', 'title', 'star', 'address', 'description']
@@ -173,9 +173,85 @@ const getPostsLimitAdminService = (page, id, query) => new Promise(async (resolv
         reject(error)
     }
 })
+
+const updatePostService = (postId, attributesId, imagesId, overviewId, body) => new Promise(async (resolve, reject) => {
+    try {
+        const labelCode = generateCode(body.label)
+        await db.Post.update({
+            title: body?.title,
+            labelCode,
+            address: body?.address,
+            categoryCode: body?.categoryCode,
+            description: JSON.stringify(body?.description),
+            areaCode: body?.areaCode,
+            priceCode: body?.priceCode,
+            priceNumber: body?.priceNumber,
+            areaNumber: body?.areaNumber,
+            provinceCode: body?.province?.includes('Thành phố')
+                ? generateCode(body?.province?.replace('Thành phố ', ''))
+                : generateCode(body?.province?.replace('Tỉnh ', ''))
+        }, {
+            where: { id: postId }
+        })
+        await db.Attribute.update({
+            price: +body?.priceNumber < 1 ? `${+body?.priceNumber * 1000000} đồng/tháng` : `${body?.priceNumber} triệu/tháng`,
+            acreage: `${+body?.areaNumber} m2`
+        }, {
+            where: { id: attributesId }
+        })
+        await db.Image.update({
+            image: JSON.stringify(body?.images),
+        }, {
+            where: { id: imagesId }
+        })
+        await db.Overview.update({
+            code: hashtag,
+            area: body?.area?.includes('Thành phố')
+                ? body?.area?.replace('Thành phố ', '')
+                : body?.area?.replace('Tỉnh ', ''),
+            type: body.categoryCode,
+            target: body.target,
+            updatedAt: currentDate
+        }, {
+            where: { id: overviewId }
+        })
+        await db.Province.findOrCreate({
+            where: {
+                [Op.or]: [
+                    { value: body?.province?.replace('Thành phố ', '') },
+                    { value: body?.province?.replace('Tỉnh ', '') },
+                ]
+            },
+            defaults: {
+                code: body?.province?.includes('Thành phố')
+                    ? generateCode(body?.province?.replace('Thành phố ', ''))
+                    : generateCode(body?.province?.replace('Tỉnh ', '')),
+                value: body?.province?.includes('Thành phố')
+                    ? body?.province?.replace('Thành phố ', '')
+                    : body?.province?.replace('Tỉnh ', '')
+            }
+        })
+        await db.Label.findOrCreate({
+            where: {
+                code: labelCode
+            },
+            defaults: {
+                code: labelCode,
+                value: body.label
+            }
+        })
+        resolve({
+            success: true,
+            msg: 'Updated post successfully'
+        })
+    } catch (error) {
+        reject(error)
+    }
+})
 module.exports = {
     getPostsLimitService,
     getNewPostsService,
     createNewPostService,
-    getPostsLimitAdminService
+    getPostsLimitAdminService,
+    updatePostService
 }

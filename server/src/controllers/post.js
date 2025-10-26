@@ -60,7 +60,7 @@ const createNewPost = asyncHandler(async (req, res) => {
 
 const getPostsLimitAdmin = asyncHandler(async (req, res) => {
     const { page, ...query } = req.query;
-    const {id} = req.user;
+    const { id } = req.user;
     try {
         if (!id) {
             return res.status(401).json({
@@ -78,10 +78,37 @@ const getPostsLimitAdmin = asyncHandler(async (req, res) => {
     }
 })
 
+const updatePost = asyncHandler(async (req, res) => {
+    const { postId, attributesId, imagesId, overviewId, ...payload } = req.body;
+    const { id } = req.user;
+    try {
+        if (!id) {
+            return res.status(401).json({
+                success: false,
+                msg: 'Unauthorized'
+            })
+        }
+        if (!postId || !attributesId || !imagesId || !overviewId) {
+            return res.status(401).json({
+                success: false,
+                msg: 'Missing required fields for update'
+            })
+        }
+        const response = await postService.updatePostService(postId, attributesId, imagesId, overviewId, payload)
+        return res.status(200).json(response)
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            msg: 'Can not update post' + error.message
+        })
+    }
+})
+
 module.exports = {
     getPosts,
     getPostsLimit,
     getNewPosts,
     createNewPost,
-    getPostsLimitAdmin
+    getPostsLimitAdmin,
+    updatePost
 }
