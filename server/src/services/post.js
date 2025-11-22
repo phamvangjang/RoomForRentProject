@@ -248,10 +248,26 @@ const updatePostService = (postId, attributesId, imagesId, overviewId, body) => 
         reject(error)
     }
 })
+
+const deletePostService = (postId) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await db.Post.destroy({
+            where: { id: postId }
+        })
+        resolve({
+            error: response > 0 ? 0 : 1,
+            success: response > 0 ? true : false,
+            msg: response > 0 ? 'Deleted post successfully' : 'Failed to delete post'
+        })
+    } catch (error) {
+        reject(error)
+    }
+})
 module.exports = {
     getPostsLimitService,
     getNewPostsService,
     createNewPostService,
     getPostsLimitAdminService,
-    updatePostService
+    updatePostService,
+    deletePostService
 }

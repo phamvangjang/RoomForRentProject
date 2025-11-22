@@ -103,3 +103,7 @@ export const editData = (dataEdit) => ({
     type: actionTypes.DATAEDIT,
     dataEdit
 })
+
+export const resetDataEdit = () => ({
+    type: actionTypes.RESET_DATAEDIT
+})

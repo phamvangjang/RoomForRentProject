@@ -104,11 +104,39 @@ const updatePost = asyncHandler(async (req, res) => {
     }
 })
 
+const deletePost = asyncHandler(async (req, res) => {
+    const { postId } = req.query;
+    const { id } = req.user;
+    try {
+        if (!id) {
+            return res.status(401).json({
+                success: false,
+                msg: 'Unauthorized'
+            })
+        }
+        if (!postId) {
+            console.log(postId);
+            return res.status(401).json({
+                success: false,
+                msg: 'Missing required fields for delete'
+            })
+        }
+        const response = await postService.deletePostService(postId)
+        return res.status(200).json(response)
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            msg: 'Can not delete post' + error.message
+        })
+    }
+})
+
 module.exports = {
     getPosts,
     getPostsLimit,
     getNewPosts,
     createNewPost,
     getPostsLimitAdmin,
-    updatePost
+    updatePost,
+    deletePost
 }

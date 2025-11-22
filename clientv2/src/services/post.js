@@ -11,7 +11,7 @@ export const apiGetPosts = () => new Promise(async (resolve, reject) => {
     } catch (error) {
         reject(error)
     }
-})
+});
 export const apiGetPostsLimit = (query) => new Promise(async (resolve, reject) => {
     try {
         const response = await axiosConfig({
@@ -23,7 +23,7 @@ export const apiGetPostsLimit = (query) => new Promise(async (resolve, reject) =
     } catch (error) {
         reject(error)
     }
-})
+});
 export const apiGetNewPosts = () => new Promise(async (resolve, reject) => {
     try {
         const response = await axiosConfig({
@@ -34,7 +34,7 @@ export const apiGetNewPosts = () => new Promise(async (resolve, reject) => {
     } catch (error) {
         reject(error)
     }
-})
+});
 export const apiCreateNewPost = (payload) => new Promise(async (resolve, reject) => {
     try {
         const response = await axiosConfig({
@@ -46,7 +46,7 @@ export const apiCreateNewPost = (payload) => new Promise(async (resolve, reject)
     } catch (error) {
         reject(error)
     }
-})
+});
 export const apiUploadImages = (images) => new Promise(async (resolve, reject) => {
     try {
         const response = await axios({
@@ -58,7 +58,7 @@ export const apiUploadImages = (images) => new Promise(async (resolve, reject) =
     } catch (error) {
         reject(error)
     }
-})
+});
 
 export const apiGetPostsLimitAdmin = (query) => new Promise(async (resolve, reject) => {
     try {
@@ -71,7 +71,7 @@ export const apiGetPostsLimitAdmin = (query) => new Promise(async (resolve, reje
     } catch (error) {
         reject(error)
     }
-})
+});
 
 export const apiUpdatePost = (payload) => new Promise(async (resolve, reject) => {
     try {
@@ -84,4 +84,17 @@ export const apiUpdatePost = (payload) => new Promise(async (resolve, reject) =>
     } catch (error) {
         reject(error)
     }
-})
+});
+
+export const apiDeletePost = (postId) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'delete',
+            url: `post/delete-post`,
+            params: { postId }
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+});

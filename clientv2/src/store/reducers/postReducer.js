@@ -5,7 +5,7 @@ const initState = {
     msg: '',
     postOfCurrent: [],
     count: 0,
-    dataEdit: {}
+    dataEdit: null
 }
 
 const postReducer = (state = initState, action) => {
@@ -34,7 +34,12 @@ const postReducer = (state = initState, action) => {
         case actionTypes.DATAEDIT:
             return {
                 ...state,
-                dataEdit: action.dataEdit || {}
+                dataEdit: action.dataEdit || null
+            }
+        case actionTypes.RESET_DATAEDIT:
+            return {
+                ...state,
+                dataEdit: null
             }
 
         default:

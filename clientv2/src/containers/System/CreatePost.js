@@ -5,24 +5,26 @@ import { getCodes, getCodesAreas } from '../../ultils/Common/getCodes'
 import { apiCreateNewPost, apiUpdatePost } from '../../services'
 import Swal from 'sweetalert2'
 import validate from '../../ultils/Common/validateFields'
-import { use } from 'react'
+import { useDispatch } from 'react-redux'
+import { resetDataEdit } from '../../store/actions/post'
 
 const CreatePost = ({ isEdit }) => {
+    const dispatch = useDispatch();
     const dataEdit = useSelector(state => state.post.dataEdit);
-    const [invalidFields, setInvalidFields] = useState([])
-    const { currentData } = useSelector(state => state.user)
-    const { prices, areas, categories, provinces } = useSelector(state => state.app)
+    const [invalidFields, setInvalidFields] = useState([]);
+    const { currentData } = useSelector(state => state.user);
+    const { prices, areas, categories, provinces } = useSelector(state => state.app);
     const [payload, setPayload] = useState(() => {
         const initData = {
             categoryCode: dataEdit?.overviews?.type || '',
             title: dataEdit?.title || '',
             priceNumber: dataEdit ? +dataEdit?.priceNumber * Math.pow(10, 6) : 0,
             areaNumber: dataEdit ? +dataEdit?.areaNumber : 0,
-            images: dataEdit ? JSON.parse(dataEdit?.images?.image) : '',
+            images: dataEdit?.images?.image ? JSON.parse(dataEdit?.images?.image) : '',
             address: dataEdit?.address || '',
             priceCode: dataEdit?.priceCode || '',
             areaCode: dataEdit?.areaCode || '',
-            description: dataEdit ? JSON.parse(dataEdit?.description) : '',
+            description: dataEdit?.description ? JSON.parse(dataEdit?.description) : '',
             target: dataEdit?.overviews?.target || '',
             province: dataEdit?.overviews?.province || ''
         }
@@ -54,37 +56,48 @@ const CreatePost = ({ isEdit }) => {
             finalPayload.overviewId = dataEdit.overviewId
         }
         console.log(finalPayload);
-        console.log(dataEdit);
 
         if (result !== 0) {
             Swal.fire('Oops!', 'Please check the form again', 'error')
         } else {
             if (isEdit && dataEdit) {
                 console.log('Final payload: ', finalPayload);
-                //const response = await apiUpdatePost(finalPayload)
+                const response = await apiUpdatePost(finalPayload);
+                if (response?.data?.success) {
+                    Swal.fire('Updated Post Successfully', response?.data?.msg, 'success').then(() => {
+                        resetPayload();
+                        dispatch(resetDataEdit());
+                    })
+                } else {
+                    Swal.fire('Oops!', 'Somethings was wrong', 'error')
+                }
             } else {
-                // const response = await apiCreateNewPost(finalPayload)
-                // if (response?.data?.success) {
-                //     Swal.fire('Successfully', response?.data?.msg, 'success').then(() => {
-                //         setPayload({
-                //             categoryCode: '',
-                //             title: '',
-                //             priceNumber: 0,
-                //             areaNumber: 0,
-                //             images: '',
-                //             address: '',
-                //             priceCode: '',
-                //             areaCode: '',
-                //             description: '',
-                //             target: '',
-                //             province: ''
-                //         })
-                //     })
-                // } else {
-                //     Swal.fire('Oops!', 'Somethings was wrong', 'error')
-                // }
+                const response = await apiCreateNewPost(finalPayload)
+                if (response?.data?.success) {
+                    Swal.fire('Successfully', response?.data?.msg, 'success').then(() => {
+                        resetPayload();
+                    })
+                } else {
+                    Swal.fire('Oops!', 'Somethings was wrong', 'error')
+                }
             }
         }
+    }
+
+    const resetPayload = () => {
+        setPayload({
+            categoryCode: '',
+            title: '',
+            priceNumber: 0,
+            areaNumber: 0,
+            images: '',
+            address: '',
+            priceCode: '',
+            areaCode: '',
+            description: '',
+            target: '',
+            province: ''
+        })
     }
 
 

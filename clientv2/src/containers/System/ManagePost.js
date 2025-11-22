@@ -1,21 +1,61 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
-import * as action from '../../store/actions'
-import moment from 'moment'
-import Button from '../../components/Button'
-import UpdatePost from '../../components/UpdatePost'
-
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import * as action from '../../store/actions';
+import moment from 'moment';
+import Button from '../../components/Button';
+import UpdatePost from '../../components/UpdatePost';
+import { apiDeletePost } from '../../services';
+import Swal from 'sweetalert2';
+import { use } from 'react';
 
 const ManagePost = () => {
+    const [statusValue, setStatusValue] = useState('0');
+    const [posts, setPosts] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
     const dispatch = useDispatch();
-    const { postOfCurrent } = useSelector(state => state.post);
+    const { postOfCurrent, dataEdit } = useSelector(state => state.post);
+    const [updateData, setUpdateData] = useState(false);
+    useEffect(() => {
+        !dataEdit && dispatch(action.getPostsLimitAdmin());
+    }, [updateData, dataEdit]);
+    useEffect(() => {
+        !dataEdit && dispatch(action.getPostsLimitAdmin());
+    }, [dataEdit]);
+    const currentDate = moment();
+    useEffect(() => {
+        !dataEdit && setIsEdit(false);
+    }, [dataEdit]);
+    useEffect(() => {
+        setPosts(postOfCurrent);
+    }, [postOfCurrent]);
+    const handleDeletePost = async (postId) => {
+        if (window.confirm('Bạn có chắc chắn muốn xóa bài viết này không?')) {
+            const response = await apiDeletePost(postId);
+            if (response?.data?.success === true) {
+                Swal.fire('Thành công!', response?.data?.msg, 'success');
+                setUpdateData(prev => !prev);
+            } else {
+                Swal.fire('Thất bại!', response?.data?.msg, 'error');
+            }
+        }
+    }
 
     useEffect(() => {
-        dispatch(action.getPostsLimitAdmin());
-    }, []);
-    const currentDate = moment();
+        if (statusValue === 1) {
+            const activePosts = postOfCurrent?.filter(post =>
+                moment(post.overviews?.expire).isSameOrAfter(currentDate, 'day')
+            );
+            setPosts(activePosts);
+        } else if (statusValue === 2) {
+            const inactivePosts = postOfCurrent?.filter(post =>
+                moment(post.overviews?.expire).isBefore(currentDate, 'day')
+            );
+            setPosts(inactivePosts);
+        } else {
+            setPosts(postOfCurrent);
+        }
+    }, [statusValue]);
 
     return (
         <div className='p-10 h-full'>
@@ -23,8 +63,13 @@ const ManagePost = () => {
                 <h1 className='text-4xl font-semibold'>
                     Quản lý bài viết
                 </h1>
-                <select className='mt-5 p-2 border-none border-gray-300 rounded-md'>
-                    <option value="">Lọc theo trạng thái</option>
+                <select
+                    onChange={e => setStatusValue(+e.target.value)}
+                    value={statusValue}
+                    className='mt-5 p-2 border-none border-gray-300 rounded-md'>
+                    <option value="0">Lọc theo trạng thái</option>
+                    <option value="1">Đang hoạt động</option>
+                    <option value="2">Hết hiệu lực</option>
                 </select>
             </div>
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 table-fixed mt-10">
@@ -41,13 +86,13 @@ const ManagePost = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {!postOfCurrent || postOfCurrent.length === 0
+                    {!posts || posts.length === 0
                         ? (
                             <tr>
                                 <td colSpan="6" className='border p-2 text-center'>Chưa có bài viết</td>
                             </tr>)
                         : (
-                            postOfCurrent.map((post, index) => (
+                            posts.map((post, index) => (
                                 <tr
                                     key={index}
                                     className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -84,6 +129,7 @@ const ManagePost = () => {
                                             bgColor={'bg-red-500'}
                                             textColor={'text-white'}
                                             text={'Xóa'}
+                                            onClick={() => handleDeletePost(post.id)}
                                         />
                                     </td>
                                 </tr>
@@ -91,7 +137,7 @@ const ManagePost = () => {
                         )}
                 </tbody>
             </table>
-            {isEdit && <UpdatePost setIsEdit={setIsEdit}/>}
+            {isEdit && <UpdatePost setIsEdit={setIsEdit} />}
         </div>
     )
 }
