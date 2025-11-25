@@ -11,11 +11,12 @@ const InputFormV2 = ({
     name,
     small,
     invalidFields,
-    setInvalidFields }) => {
+    setInvalidFields,
+    direction }) => {
     return (
-        <div className='text-sm flex flex-col gap-1 w-full'>
-            <label htmlFor={text} className='font-medium'>{label}</label>
-            <div className={clsx('', unit && 'flex items-center justify-center w-full')}>
+        <div className={`text-sm flex gap-1 w-full ${direction ? direction : 'flex-col'}`}>
+            <label htmlFor={text} className='font-medium w-48 flex-none'>{label}</label>
+            <div className={clsx('w-full', unit && 'flex items-center justify-center ')}>
                 <input
                     type={type || 'text'}
                     id='title'
@@ -28,9 +29,10 @@ const InputFormV2 = ({
                 {unit && <span className={clsx('w-16 bg-[#e9ecef] flex items-center justify-center h-full', unit && 'rounded-r-md')}>{unit}</span>}
             </div>
             {small && <small className='text-[#6c757d] text-xs whitespace-nowrap'>{small}</small>}
+            {invalidFields?.some(item => item.name === name) && 
             <small className='text-red-500 italic w-full block'>
-                {invalidFields?.some(item => item.name === name) && invalidFields?.find(item => item.name === name)?.messages}
-            </small>
+                {invalidFields?.find(item => item.name === name)?.messages}
+            </small>}
         </div>
     )
 }

@@ -105,8 +105,6 @@ const updatePost = asyncHandler(async (req, res) => {
 })
 
 const deletePost = asyncHandler(async (req, res) => {
-    const { postId } = req.query;
-    const { id } = req.user;
     try {
         if (!id) {
             return res.status(401).json({
