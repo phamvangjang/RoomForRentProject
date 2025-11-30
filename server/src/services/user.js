@@ -19,6 +19,21 @@ const getOneService = (id) => new Promise(async (resolve, reject) => {
         reject(error)
     }
 })
+
+const updatedUserService = (payload, id) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await db.User.update(payload, {
+            where: { id }
+        })
+        resolve({
+            success: response ? true : false,
+            msg: response ? 'Updated Successfully' : 'Failed to update'
+        })
+    } catch (error) {
+        reject(error)
+    }
+})
 module.exports = {
-    getOneService
+    getOneService,
+    updatedUserService
 }

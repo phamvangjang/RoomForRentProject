@@ -11,3 +11,16 @@ export const apiGetCurrent = () => new Promise(async (resolve, reject) => {
         reject(error)
     }
 })
+
+export const apiUpdateUser = (payload) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'put',
+            url: `user/updateUser`,
+            data: payload
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+})
