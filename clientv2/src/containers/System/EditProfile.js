@@ -2,21 +2,25 @@ import React from 'react'
 import { InputReadOnly, InputFormV2, Button } from '../../components'
 import { useState } from 'react'
 import userIcon from '../../assets/user-icon.png'
-import { useSelector } from 'react-redux'
-import { apiUploadImages, apiUpdateUser } from '../../services'
+import { useSelector, useDispatch } from 'react-redux'
+import { apiUpdateUser } from '../../services'
 import Swal from 'sweetalert2'
+import { fileToBase64, blobToBase64 } from '../../ultils/Common/toBase64'
+import { getCurrent } from '../../store/actions'
 
 const EditProfile = () => {
+  const dispatch = useDispatch();
   const { currentData } = useSelector(state => state.user);
   const [payoad, setPayload] = useState({
     name: currentData?.name || '',
     zalo: currentData?.zalo || '',
     fbUrl: currentData?.fbUrl || '',
-    avatar: currentData?.avatar || '',
+    avatar: blobToBase64(currentData?.avatar) || '',
   });
   const handleSubmit = async () => {
     const response = await apiUpdateUser(payoad);
     if (response.status === 200) {
+      dispatch(getCurrent());
       Swal.fire({
         icon: 'success',
         title: response?.data?.msg,
@@ -29,18 +33,11 @@ const EditProfile = () => {
     }
   }
   const handleUploadAvatar = async (e) => {
-    const image = e.target.files[0];
-    const formData = new FormData();
-    formData.append('file', image)
-    formData.append('upload_preset', process.env.REACT_APP_UPLOAD_ASSETS_NAME);
-    const response = await apiUploadImages(formData);
-    console.log(response);
-    if (response?.status === 200) {
-      setPayload(prev => ({
-        ...prev,
-        avatar: response?.data?.secure_url
-      }))
-    }
+    const imagesToBase64 = await fileToBase64(e.target.files[0]);
+    setPayload(prev => ({
+      ...prev,
+      avatar: imagesToBase64
+    }));
   }
   return (
     <div className='flex flex-col items-center h-full p-10'>
@@ -84,7 +81,7 @@ const EditProfile = () => {
             <label className='w-48 flex-none' htmlFor='password'>Ảnh đại diện</label>
             <div className='flex flex-col items-start gap-4'>
               <img
-                src={currentData?.avatar || userIcon}
+                src={payoad?.avatar || userIcon}
                 alt='Ảnh đại diện'
                 className='w-24 h-24 rounded-full object-cover' />
               <input type='file' id='avatar' className='appearance-none' onChange={handleUploadAvatar} />

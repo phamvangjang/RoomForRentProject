@@ -4,7 +4,8 @@ import userIcon from '../../assets/user-icon.png'
 import { menuSidebar } from '../../ultils/Common/menuSidebar'
 import { NavLink } from 'react-router-dom'
 import { FaSignOutAlt } from "react-icons/fa";
-import * as actions from '../../store/actions'
+import * as actions from '../../store/actions';
+import { blobToBase64 } from '../../ultils/Common/toBase64'
 
 const activeStyle = 'font-bold cursor-pointer hover:bg-[#f1f1f1] flex items-center gap-2 text-main text-base p-2'
 const noActiveStyle = 'cursor-pointer hover:bg-[#f1f1f1] flex items-center gap-2 text-main text-base p-2'
@@ -16,7 +17,7 @@ const Sidebar = () => {
             <div className='flex flex-col gap-3'>
                 <div className='flex gap-2'>
                     <img
-                        src={currentData?.avatar || userIcon}
+                        src={blobToBase64(currentData?.avatar) || userIcon}
                         alt='avatar'
                         className='h-[50px] w-[50px] object-cover rounded-full border-2 border-white'
                     />
