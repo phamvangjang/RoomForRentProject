@@ -2,6 +2,8 @@ import React, { memo, useState } from 'react'
 import { FaStar, FaHeart, FaRegHeart } from "react-icons/fa";
 import { Button } from '../components'
 import { Link, useNavigate } from 'react-router-dom';
+import { path } from '../ultils/constant';
+import { formatVietnameseToString } from '../ultils/Common/formatVnToString';
 
 const indexs = [0, 1, 2, 3];
 const Item = ({ images, user, title, description, star, attributes, address, id }) => {
@@ -16,7 +18,7 @@ const Item = ({ images, user, title, description, star, attributes, address, id 
         <div className='w-full bg-secondary3 border-t-2 border-[#E13427]'>
             <div className='w-full flex py-4 px-5'>
                 <Link
-                    to={`chi-tiet/${title}/${id}`}
+                    to={`${path.DETAIL}${formatVietnameseToString(title.replaceAll('/', ''))}/${id}`}
                     className='w-[40%] flex flex-wrap items-center justify-center relative cursor-pointer gap-[2px]'>
                     {images?.length > 0 && images.filter((i, index) => indexs.some(i => i === index))?.map((i, index) => {
                         return (
@@ -45,7 +47,11 @@ const Item = ({ images, user, title, description, star, attributes, address, id 
                                 )
                             })}
                         </span>
-                        <h2 className='text-sm text-title font-semibold whitespace-normal text-ellipsis'>{title}</h2>
+                        <Link
+                            to={`${path.DETAIL}${formatVietnameseToString(title.replaceAll('/', ''))}/${id}`}
+                            className='text-sm text-title font-semibold whitespace-normal text-ellipsis'>
+                            {title}
+                        </Link>
                     </div>
 
                     <div className='flex flex-col gap-1'>

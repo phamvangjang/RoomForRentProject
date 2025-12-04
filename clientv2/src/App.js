@@ -8,9 +8,9 @@ import {
   SearchDetail
 } from './containers/Public';
 import { path } from './ultils/constant'
-import { 
-  CreatePost, 
-  System, 
+import {
+  CreatePost,
+  System,
   ManagePost,
   EditProfile,
   Contacts
