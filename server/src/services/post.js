@@ -5,7 +5,7 @@ const moment = require('moment')
 require('moment/locale/vi');
 const { generateCode } = require('../ultils/generateCode');
 
-const getPostsLimitService = (page, {limitPost, order, ...query}, { priceNumber, areaNumber }) => new Promise(async (resolve, reject) => {
+const getPostsLimitService = (page, { limitPost, order, ...query }, { priceNumber, areaNumber }) => new Promise(async (resolve, reject) => {
     try {
         let offset = (!page || +page <= 1) ? 0 : (+page - 1)
         const queries = { ...query }
@@ -30,6 +30,7 @@ const getPostsLimitService = (page, {limitPost, order, ...query}, { priceNumber,
                 { model: db.Image, as: 'images', attributes: ['image'] },
                 { model: db.Attribute, as: 'attributes', attributes: ['price', 'acreage', 'published', 'hashtag'] },
                 { model: db.User, as: 'user', attributes: ['name', 'zalo', 'phone'] },
+                { model: db.Overview, as: 'overviews' }
             ],
             attributes: ['id', 'title', 'star', 'address', 'description']
         })

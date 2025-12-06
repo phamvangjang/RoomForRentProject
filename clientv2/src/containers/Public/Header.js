@@ -58,7 +58,7 @@ const Header = () => {
                         bgColor='bg-secondary1'
                         onClick={() => setIsShowMenu(prev => !prev)} />
                     {isShowMenu && <div
-                        className='absolute top-full right-0 bg-white shadow-md rounded-md  px-5 py-4 w-[200px] flex flex-col gap-2 text-[#1266dd] text-sm'>
+                        className='absolute top-full right-0 bg-white shadow-md rounded-md  px-5 py-4 w-[200px] flex flex-col gap-2 text-[#1266dd] text-sm z-10'>
                         {menuManage.map(item => {
                             return (
                                 <Link

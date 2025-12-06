@@ -4,7 +4,7 @@ import { FaHotel, FaChevronRight, FaMoneyBill, FaCrop, FaSearch } from "react-ic
 import { CiLocationOn } from "react-icons/ci";
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/actions'
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import { path } from '../../ultils/constant';
 
 const Search = () => {
@@ -16,7 +16,8 @@ const Search = () => {
     const [name, setName] = useState('')
     const [content, setContent] = useState([])
     const [isShowModal, setIsShowModal] = useState(false)
-    const { areas, prices, categories, provinces } = useSelector(state => state.app)
+    const { areas, prices, categories, provinces } = useSelector(state => state.app);
+    const location = useLocation();
 
     useEffect(() => {
         if (!location.pathname.includes(path.SEARCH)) {

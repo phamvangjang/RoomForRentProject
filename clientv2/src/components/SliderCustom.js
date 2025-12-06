@@ -9,7 +9,6 @@ const settings = {
     slidesToScroll: 1
 };
 const SliderCustom = ({ images }) => {
-    console.log(images)
     return (
         <div>
             <Slider {...settings}>
