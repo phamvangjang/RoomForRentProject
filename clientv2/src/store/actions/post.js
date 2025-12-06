@@ -9,7 +9,6 @@ import actionTypes from './actionTypes'
 export const getPosts = () => async (dispatch) => {
     try {
         const response = await apiGetPosts()
-        // console.log(response)
         if (response?.data.success) {
             dispatch({
                 type: actionTypes.GET_POSTS,
@@ -31,7 +30,6 @@ export const getPosts = () => async (dispatch) => {
 export const getPostsLimit = (query) => async (dispatch) => {
     try {
         const response = await apiGetPostsLimit(query)
-        // console.log(response)
         if (response?.data.success) {
             dispatch({
                 type: actionTypes.GET_POSTS_LIMIT,
@@ -54,7 +52,6 @@ export const getPostsLimit = (query) => async (dispatch) => {
 export const getNewPosts = () => async (dispatch) => {
     try {
         const response = await apiGetNewPosts()
-        // console.log(response)
         if (response?.data.success) {
             dispatch({
                 type: actionTypes.GET_NEW_POSTS,

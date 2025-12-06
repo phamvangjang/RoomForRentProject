@@ -77,3 +77,19 @@ input[type='range']::-ms-thumb {
 input[type='range']::-ms-thumb:active {
   border: solid 1px #717ef6;
 }
+
+button.slick-arrow::before {
+  font-size: 50px !important;
+  color: yellow !important;
+}
+
+.slick-next {
+  right: 35px !important;
+  top: 40% !important;
+}
+
+.slick-prev {
+  left: 10px !important;
+  z-index: 10 !important;
+  top: 40% !important;
+}
