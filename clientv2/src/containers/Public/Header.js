@@ -50,7 +50,7 @@ const Header = () => {
                         onClick={() => { goLogin(true) }} />
                 </>}
                 {isLoggedIn && <div className='flex items-center gap-2 relative'>
-                    <User/>
+                    <User />
                     <Button
                         IcBefore={MdApps}
                         text={'Manage Account'}
@@ -85,7 +85,8 @@ const Header = () => {
                     text={'Create new post'}
                     textColor='text-white'
                     bgColor='bg-secondary2'
-                    IcAfter={AiOutlinePlusCircle} />
+                    IcAfter={AiOutlinePlusCircle}
+                    onClick={() => navigate('/he-thong/tao-moi-bai-dang')} />
             </div>
         </div>
     )

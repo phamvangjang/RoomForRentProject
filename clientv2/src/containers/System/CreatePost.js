@@ -55,13 +55,11 @@ const CreatePost = ({ isEdit }) => {
             finalPayload.imagesId = dataEdit.imagesId
             finalPayload.overviewId = dataEdit.overviewId
         }
-        console.log(finalPayload);
 
         if (result !== 0) {
             Swal.fire('Oops!', 'Please check the form again', 'error')
         } else {
             if (isEdit && dataEdit) {
-                console.log('Final payload: ', finalPayload);
                 const response = await apiUpdatePost(finalPayload);
                 if (response?.data?.success) {
                     Swal.fire('Updated Post Successfully', response?.data?.msg, 'success').then(() => {

@@ -20,7 +20,7 @@ const Item = ({ images, user, title, description, star, attributes, address, id 
                 <Link
                     to={`${path.DETAIL}${formatVietnameseToString(title.replaceAll('/', ''))}/${id}`}
                     className='w-[40%] flex flex-wrap items-center justify-center relative cursor-pointer gap-[2px]'>
-                    {images?.length > 0 && images.filter((i, index) => indexs.some(i => i === index))?.map((i, index) => {
+                    {images?.length > 0 && images.filter((i, index) => [...Array(4).keys()].some(i => i === index))?.map((i, index) => {
                         return (
                             <img
                                 key={index}
@@ -79,16 +79,19 @@ const Item = ({ images, user, title, description, star, attributes, address, id 
                             <span className='text-sm text-desc'>{user?.name}</span>
                         </div>
                         <div className='flex items-center gap-1 text-sm'>
-                            <Button
-                                bgColor={'bg-secondary1'}
-                                size={14}
-                                textColor={'text-white'}
-                                text={`Gọi ${user?.phone}`} />
-                            <Button
-                                bgColor={'bg-secondary1'}
-                                size={14}
-                                textColor={'text-white'}
-                                text={`Zalo ${user?.zalo}`} />
+                            <a
+                                target='blank'
+                                className='p-2 bg-secondary1 text-white rounded-md'
+                                href={`tel:${user?.phone}`}>
+                                Gọi {user?.phone}
+
+                            </a>
+                            <a
+                                target='blank'
+                                className='p-2 bg-secondary1 text-white rounded-md'
+                                href={`https://zalo.me/${user?.zalo}`}>
+                                Zalo {user?.zalo}
+                            </a>
                         </div>
                     </div>
 
