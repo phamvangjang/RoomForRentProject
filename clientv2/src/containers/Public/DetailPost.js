@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getPostsLimit } from '../../store/actions/post';
 import { SliderCustom } from '../../components';
 import moment from 'moment';
+import { Map } from '../../components';
+import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 
 const DetailPost = () => {
+    const [coords, setCoords] = useState(null);
     const { postId } = useParams();
     const dispatch = useDispatch();
     const { posts } = useSelector(state => state.post);
@@ -15,6 +18,15 @@ const DetailPost = () => {
             dispatch(getPostsLimit({ id: postId }));
         }
     }, [postId]);
+
+    // useEffect(() => {
+    //     const getCoords = async () => {
+    //         const results = await geocodeByAddress(posts[0]?.address);
+    //         const latLng = await getLatLng(results[0]);
+    //         setCoords(latLng);
+    //     }
+    //     posts && getCoords();
+    // }, [posts]);
     return (
         <div className='w-full flex gap-4'>
             <div className='w-[70%]'>
@@ -80,6 +92,7 @@ const DetailPost = () => {
                             </table>
                         </div>
                     </div>
+
                     <div className='border-t'>
                         <h2 className='font-semibold text-lg mb-2 mt-4'>Thông tin mô tả</h2>
                         <div className='text-sm text-justify leading-7 flex flex-col gap-2'>
@@ -89,6 +102,10 @@ const DetailPost = () => {
                                 )
                             })}
                         </div>
+                    </div>
+
+                    <div className='border-t mt-4 pt-4'>
+                        map
                     </div>
                 </div>
             </div>
