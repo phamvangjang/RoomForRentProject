@@ -48,7 +48,7 @@ const Item = ({ images, user, title, description, star, attributes, address, id 
                             })}
                         </span>
                         <Link
-                            to={`${path.DETAIL}${formatVietnameseToString(title.replaceAll('/', ''))}/${id}`}
+                            to={`/${path.DETAIL}${formatVietnameseToString(title.replaceAll('/', ''))}/${id}`}
                             className='text-sm text-title font-semibold whitespace-normal text-ellipsis'>
                             {title}
                         </Link>

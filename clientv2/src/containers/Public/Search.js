@@ -58,7 +58,7 @@ const Search = () => {
                         : ''}`
         // console.log(titleSearch)
         navigate({
-            pathname: path.SEARCH,
+            pathname: `/${path.SEARCH}`,
             search: createSearchParams(queryCodesObj).toString()
         }, { state: { titleSearch } })
     }

@@ -7,8 +7,11 @@ import { Boxinfor, SliderCustom, RelatedPost } from '../../components';
 import moment from 'moment';
 import { Map } from '../../components';
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import { useNavigate, createSearchParams } from 'react-router-dom';
+import { path } from '../../ultils/constant';
 
 const DetailPost = () => {
+    const navigate = useNavigate();
     const [coords, setCoords] = useState(null);
     const { postId } = useParams();
     const dispatch = useDispatch();
@@ -27,6 +30,13 @@ const DetailPost = () => {
     //     }
     //     posts && getCoords();
     // }, [posts]);
+    const handleFilterLabel = () => {
+        const titleSearch = `Tìm kiếm theo chuyên mục: ${posts[0]?.labels?.value}`;
+        navigate({
+            pathname: `/${path.SEARCH}`,
+            search: createSearchParams({ labelCode: posts[0]?.labels?.code }).toString()
+        }, { state: { titleSearch } })
+    }
     return (
         <div className='w-full flex gap-4'>
             <div className='w-[70%]'>
@@ -46,7 +56,9 @@ const DetailPost = () => {
                                 <tbody>
                                     <tr>
                                         <td className='py-1 pr-4 flex-2 font-semibold'>Quận huyện:</td>
-                                        <td className='py-1 flex-auto text-blue-500 underline cursor-pointer'>{posts[0]?.overviews?.area}</td>
+                                        <td
+                                            onClick={handleFilterLabel}
+                                            className='py-1 flex-auto text-blue-500 underline cursor-pointer'>{posts[0]?.labels?.value}</td>
                                     </tr>
                                     <tr>
                                         <td className='py-1 pr-4 flex-2 font-semibold'>Gói tin:</td>
