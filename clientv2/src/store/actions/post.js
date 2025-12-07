@@ -49,6 +49,7 @@ export const getPostsLimit = (query) => async (dispatch) => {
         })
     }
 }
+
 export const getNewPosts = () => async (dispatch) => {
     try {
         const response = await apiGetNewPosts()
@@ -68,6 +69,32 @@ export const getNewPosts = () => async (dispatch) => {
         dispatch({
             type: actionTypes.GET_NEW_POSTS,
             newPosts: null
+        })
+    }
+}
+
+export const getOutStandingPosts = () => async (dispatch) => {
+    try {
+        const response = await apiGetPostsLimit({
+            limitPost: 5,
+            order: ['star', 'DESC']
+        })
+        if (response?.data.success) {
+            dispatch({
+                type: actionTypes.GET_OUT_STANDING_POSTS,
+                outStandingPosts: response.data.response
+            })
+        } else {
+            dispatch({
+                type: actionTypes.GET_OUT_STANDING_POSTS,
+                msg: response.data.msg,
+                outStandingPosts: null
+            })
+        }
+    } catch (error) {
+        dispatch({
+            type: actionTypes.GET_OUT_STANDING_POSTS,
+            outStandingPosts: null
         })
     }
 }

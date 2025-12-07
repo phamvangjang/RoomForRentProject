@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getPostsLimit } from '../../store/actions/post';
-import { SliderCustom } from '../../components';
+import { Boxinfor, SliderCustom, RelatedPost } from '../../components';
 import moment from 'moment';
 import { Map } from '../../components';
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
@@ -109,8 +109,9 @@ const DetailPost = () => {
                     </div>
                 </div>
             </div>
-            <div className='w-[30%]'>
-                Content
+            <div className='w-[30%] flex flex-col gap-4'>
+                <Boxinfor userData={posts[0]?.user} />
+                <RelatedPost />
             </div>
         </div>
     )
