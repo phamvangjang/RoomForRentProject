@@ -13,7 +13,7 @@ const CreatePost = ({ isEdit }) => {
     const dataEdit = useSelector(state => state.post.dataEdit);
     const [invalidFields, setInvalidFields] = useState([]);
     const { currentData } = useSelector(state => state.user);
-    const { prices, areas, categories, provinces } = useSelector(state => state.app);
+    const { prices, areas, categories } = useSelector(state => state.app);
     const [payload, setPayload] = useState(() => {
         const initData = {
             categoryCode: dataEdit?.overviews?.type || '',

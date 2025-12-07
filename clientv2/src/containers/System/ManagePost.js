@@ -7,7 +7,6 @@ import Button from '../../components/Button';
 import UpdatePost from '../../components/UpdatePost';
 import { apiDeletePost } from '../../services';
 import Swal from 'sweetalert2';
-import { use } from 'react';
 
 const ManagePost = () => {
     const [statusValue, setStatusValue] = useState('0');
